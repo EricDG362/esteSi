@@ -5,7 +5,8 @@ import Archivos from '../screens/archivos/Archivos';
 import Archivo from '../screens/archivos/Archivo';
 import Nuevo from '../screens/archivos/Nuevo';
 import Login from '../screens/login/Login';
-import Home from '../screens/home/Home';
+
+
 
 //el satte de context
 
@@ -34,6 +35,7 @@ const NavegacionStack = () => {
         }
       } 
       /> 
+     
       <Stack.Screen 
         name="Archivos" 
         component={Archivos} 

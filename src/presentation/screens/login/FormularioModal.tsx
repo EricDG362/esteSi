@@ -8,6 +8,7 @@ import {
 } from 'react-native'
 //apollo
 import { gql, useMutation } from '@apollo/client';
+import { StackActions, useNavigation } from '@react-navigation/native';
 
 
 interface FormularioModalProps {
@@ -28,14 +29,13 @@ const FormularioModal =  ({ modalVisible, setModalVisible }: FormularioModalProp
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
 
+const navi = useNavigation()
+
   //mutation apolo
   const [crearUsuario] = useMutation(NUEVA_CUENTA) 
   
-
-
   //envia el formulario
   const handleSubmit = async () => {
-
     //validar campos
     if (nombre === "" || apellido === "" || email === "" || password === "") {
       Alert.alert(
@@ -65,6 +65,14 @@ try {
       }
     }
   })
+
+  Alert.alert(
+    'Usuario Creado!',
+    'Su cuenta fue creada con exito!!.',  
+  );
+
+  setModalVisible(!modalVisible)//cambie el estado a lo opuesto a lo q esta
+
   
 } catch (error) {
   console.log(error)
