@@ -3,8 +3,11 @@ import {
   Text, Modal, SafeAreaView, StyleSheet, TextInput, View, Pressable,
   TouchableWithoutFeedback, Keyboard,
   KeyboardAvoidingView,
-  Platform
+  Platform,
+  Alert
 } from 'react-native'
+//apollo
+import { gql, useMutation } from '@apollo/client';
 
 
 interface FormularioModalProps {
@@ -12,29 +15,62 @@ interface FormularioModalProps {
   setModalVisible: (visible: boolean) => void; // Es una función que actualiza el estado
 }
 
+const NUEVA_CUENTA = gql`
+mutation crearUsuario ($input:UsuarioInput){
+    crearUsuario(input:$input)
+}`;
+
 //aca se loo asignamos
-const FormularioModal = ({ modalVisible, setModalVisible }: FormularioModalProps) => {
+const FormularioModal =  ({ modalVisible, setModalVisible }: FormularioModalProps) => {
 
   const [nombre, setNombre] = useState('')
   const [apellido, setApellido] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
 
-  //satet 
-  const [mensaje, setMensaje] = useState(null)
+  //mutation apolo
+  const [crearUsuario] = useMutation(NUEVA_CUENTA) 
+  
 
 
   //envia el formulario
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
 
     //validar campos
     if (nombre === "" || apellido === "" || email === "" || password === "") {
-
-      //password 6 caracteres
-
-      //guardar usuario
-
+      Alert.alert(
+        'Error!',
+        'Todos los campos son obligatorios.',  
+      );
+      return;
     }
+    //password 6 caracteres
+    if(password.length <6){
+      Alert.alert(
+        'Error!',
+        'La Contraseña debe contener al menos 6 caracteres.',  
+      );
+      return;
+    }
+
+    //guardar usuario
+try {
+  const {data} = await crearUsuario({
+    variables:{
+      input:{
+        nombre,
+        apellido,
+        email,
+        password
+      }
+    }
+  })
+  
+} catch (error) {
+  console.log(error)
+}
+
+
   }
 
 
