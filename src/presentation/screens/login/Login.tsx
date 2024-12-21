@@ -2,16 +2,84 @@ import React, { useState } from 'react';
 import {
   Text, TextInput, TouchableWithoutFeedback, KeyboardAvoidingView,
   ImageBackground, StyleSheet, Platform, Keyboard, Pressable, View,
+  Alert,
 } from 'react-native';
 import { StackActions, useNavigation } from '@react-navigation/native';
-
 import FormularioModal from './FormularioModal';
+
+//apollo
+import { ApolloError, gql, useMutation } from '@apollo/client';
+
+const AUTENTICAR_USUARIO = gql`
+mutation autenticarUsuario($input: AutenticarInput) {
+  autenticarUsuario(input: $input) {
+    token
+  }
+ }
+`;
 
 const Login = () => {
   const [modalVisible, setModalVisible] = useState<boolean>(false);
   const [secureTextEntry, setSecureTextEntry] = useState(true); // Estado para manejar la visibilidad de la contraseña
 
+  const [email, setEmail] = useState('')
+  const [password, setPass] = useState('')
+
   const navi = useNavigation();
+
+//mutation de apollo
+const [autenticarUsuario] =useMutation(AUTENTICAR_USUARIO)
+
+
+
+  //boton iniciar sesion
+  const iniciarSesion = async () => {
+
+    //validar campos
+    if (email === "" || password === "") {
+      Alert.alert(
+        'Error!',
+        'Todos los campos son obligatorios.',
+      );
+      return; //corte la ejecucion
+    }
+
+    //autenticar
+    try {
+      const {data} = await autenticarUsuario({
+        variables: {
+          input:{
+            email, //estos input deben ser igual a como estran llamados en 
+            password
+          }
+        }
+      })
+
+     
+      const {token} = data.autenticarUsuario //extraemos el token
+
+    } catch (error: unknown) {
+    
+      let errorMessage = '';
+    
+      if (error instanceof ApolloError) {
+        // Si el error es un ApolloError, accedemos a graphQLErrors
+        errorMessage = error.graphQLErrors?.[0]?.message || error.message || errorMessage;
+      } else if (error instanceof Error) {
+        // Si es un error genérico
+        errorMessage = error.message;
+      }
+    
+      Alert.alert('Error', errorMessage);
+    }
+
+    //
+
+  }
+
+
+
+
 
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
@@ -29,6 +97,7 @@ const Login = () => {
             placeholder="EMAIL"
             placeholderTextColor={'#000'}
             keyboardType="email-address"
+            onChangeText={text => setEmail(text)}
           />
 
           <View style={estilo.inputContainer}>
@@ -37,6 +106,7 @@ const Login = () => {
               placeholder="PASSWORD"
               placeholderTextColor={'#000'}
               secureTextEntry={secureTextEntry} // Cambia dinámicamente según el estado
+              onChangeText={text => setPass(text)}
             />
             <Pressable
               style={estilo.toggleButton}
@@ -51,7 +121,8 @@ const Login = () => {
           <Pressable
             style={estilo.boton}
             onPress={() => {
-              navi.dispatch(StackActions.replace('NavegacionTop'));
+              //navi.dispatch(StackActions.replace('NavegacionTop'));
+              iniciarSesion()
             }}
           >
             <Text style={estilo.botontext}>INGRESAR</Text>
