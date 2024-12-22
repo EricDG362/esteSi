@@ -6,6 +6,8 @@ import {
 } from 'react-native';
 import { StackActions, useNavigation } from '@react-navigation/native';
 import FormularioModal from './FormularioModal';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 
 //apollo
 import { ApolloError, gql, useMutation } from '@apollo/client';
@@ -49,7 +51,7 @@ const [autenticarUsuario] =useMutation(AUTENTICAR_USUARIO)
       const {data} = await autenticarUsuario({
         variables: {
           input:{
-            email, //estos input deben ser igual a como estran llamados en 
+            email, //estos input deben ser igual a como estan llamados en schema sino no funciona no los toma en el usestate llamr igual)
             password
           }
         }
@@ -57,6 +59,11 @@ const [autenticarUsuario] =useMutation(AUTENTICAR_USUARIO)
 
      
       const {token} = data.autenticarUsuario //extraemos el token
+      console.log(token)
+      //lo colocamos en storage
+      await AsyncStorage.setItem('token', token)
+      //direccionamos a donde necesitamos (al inicio)
+      navi.dispatch(StackActions.replace('NavegacionTop'));
 
     } catch (error: unknown) {
     
@@ -73,7 +80,6 @@ const [autenticarUsuario] =useMutation(AUTENTICAR_USUARIO)
       Alert.alert('Error', errorMessage);
     }
 
-    //
 
   }
 

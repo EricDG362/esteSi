@@ -7,25 +7,81 @@ import {
     Alert,
 } from 'react-native'
 
+import { ApolloError, gql, useMutation } from '@apollo/client';
+
+const NUEVO_PROCEDIMIENTO = gql`
+
+mutation nuevoProcedimiento($input:ProcedimientoInput){
+
+   nuevoProcedimiento(input:$input){
+        sumario
+        proce
+        id
+    }
+}
+`
+
 
 const Nuevo = () => {
 
     const [sumario, setSumario] = useState('')
     const [proce, setProce] = useState('')
 
-const navi = useNavigation()
+    //apollo
+    const [nuevoProcedimiento] = useMutation(NUEVO_PROCEDIMIENTO)
 
-    const guardarProce = () =>{
-        
-        if([sumario,proce].includes('')){ //si alguno esta vacio salta alert
-                Alert.alert(
-                    'Error',
-                    'Todos los campos son obligatorios (ingrese 0 si aun no tiene N° de sumario)',
-                    [{text:'Aceptar'}]
-                )
-                return //para q corte el codigo aca
+    const navi = useNavigation()
+
+    const guardarProce = async () => {
+
+        //validar
+        if ([sumario, proce].includes('')) { //si alguno esta vacio salta alert
+            Alert.alert(
+                'Error',
+                'Todos los campos son obligatorios (ingrese 0 si aun no tiene N° de sumario)',
+                [{ text: 'Aceptar' }]
+            )
+            return //para q corte el codigo aca
         }
+        
 
+        //guardar proce
+        try {
+            const {data} = await nuevoProcedimiento({
+
+                variables:{
+                    input:{
+                        sumario,
+                        proce
+                    }
+                }
+
+            })
+
+            Alert.alert(
+                'Guardado',
+                'Su Procedimiento ah sido Guardado con Exito!!!',
+                [{ text: 'Aceptar' }]
+            )
+
+            navi.navigate("Archivos" as never)
+
+
+
+        } catch (error: unknown) {
+
+            let errorMessage = '';
+
+            if (error instanceof ApolloError) {
+                // Si el error es un ApolloError, accedemos a graphQLErrors
+                errorMessage = error.graphQLErrors?.[0]?.message || error.message || errorMessage;
+            } else if (error instanceof Error) {
+                // Si es un error genérico
+                errorMessage = error.message;
+            }
+
+            Alert.alert('Error', errorMessage);
+        }
 
     }
 
@@ -46,7 +102,7 @@ const navi = useNavigation()
                     placeholder='N° SUMARIO'
                     keyboardType="default"
                     value={sumario}
-                    onChangeText={setSumario}
+                    onChangeText={text => setSumario(text)}
 
                 />
 
@@ -58,19 +114,19 @@ const navi = useNavigation()
                     numberOfLines={10} // Define el tamaño vertical inicial
                     textAlignVertical="top" // Alinea el texto en la parte superior
                     value={proce}
-                    onChangeText={setProce}
+                    onChangeText={text => setProce(text)}
                 />
 
                 <Pressable //boton Guardar
                     style={e.boton}
-                    onPress={guardarProce}
+                    onPress={() => guardarProce()}
                 >
                     <Text style={e.BotonText}>GUARDAR</Text>
                 </Pressable>
 
                 <Pressable //boton cancelar
                     style={[e.boton, , e.btnCancelar]}
-                    onPress={ () => navi.dispatch(StackActions.pop(1))} //retropcede una pantalla atras (1)
+                    onPress={() => navi.dispatch(StackActions.pop(1))} //retropcede una pantalla atras (1)
                 >
                     <Text style={[e.BotonText]}>CANCELAR</Text>
                 </Pressable>
