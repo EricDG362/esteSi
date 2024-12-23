@@ -120,8 +120,9 @@ try {
               <Text style={estilo.label} >EMAIL</Text>
               <TextInput
                 style={estilo.input}
+                onChangeText={text => setEmail(text.toLowerCase())}
                 value={email}
-                onChangeText={text => setEmail(text)}
+                
               />
             </View>
 

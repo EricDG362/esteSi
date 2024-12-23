@@ -20,6 +20,18 @@ mutation nuevoProcedimiento($input:ProcedimientoInput){
     }
 }
 `
+//actuliza el cache para q al agregar uno nuevo ya aparesca el ultimo agregado (este query es sacado dearchivos.tsx)
+const OBTENER_PROCEDIMIENTOS = gql`
+
+query obtenerProcedimientos {
+obtenerProcedimientos {
+     sumario
+     proce
+     id
+     }
+ } 
+
+`
 
 
 const Nuevo = () => {
@@ -27,8 +39,29 @@ const Nuevo = () => {
     const [sumario, setSumario] = useState('')
     const [proce, setProce] = useState('')
 
-    //apollo
-    const [nuevoProcedimiento] = useMutation(NUEVO_PROCEDIMIENTO)
+    
+ // Apollo
+const [nuevoProcedimiento] = useMutation(NUEVO_PROCEDIMIENTO, {
+    update(cache, { data: { nuevoProcedimiento } }) {
+      // Tipado explícito para evitar errores con `readQuery`
+      const data = cache.readQuery<{
+        obtenerProcedimientos: Array<{ id: string; sumario: string; proce: string }>;
+      }>({
+        query: OBTENER_PROCEDIMIENTOS,
+      });
+  
+      if (data?.obtenerProcedimientos) {
+        // Sobrescribe el cache con el nuevo procedimiento agregado
+        cache.writeQuery({
+          query: OBTENER_PROCEDIMIENTOS,
+          data: {
+            obtenerProcedimientos: [...data.obtenerProcedimientos, nuevoProcedimiento],
+          },
+        });
+      }
+    },
+  });
+  
 
     const navi = useNavigation()
 
@@ -60,7 +93,7 @@ const Nuevo = () => {
 
             Alert.alert(
                 'Guardado',
-                'Su Procedimiento ah sido Guardado con Exito!!!',
+                'Procedimiento Guardado con Exito!!!',
                 [{ text: 'Aceptar' }]
             )
 

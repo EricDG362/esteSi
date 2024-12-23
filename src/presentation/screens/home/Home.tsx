@@ -1,9 +1,46 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { SafeAreaView, Keyboard, Pressable, StyleSheet, Text, TouchableWithoutFeedback, View } from 'react-native'
+import {jwtDecode} from 'jwt-decode';
+
+
+
+// Define the custom JWT payload type
+interface CustomJwtPayload {
+  id: string;
+  email: string;
+  nombre: string;
+  exp: number;
+  iat: number;
+}
+
+
+
+
+
 
 
 const Home = () => {
+
+  const [nombre, setNombre] = useState<string | null>(null);
+
+
+  useEffect(() => {
+    const obtenerNombre = async () => {
+      const token = await AsyncStorage.getItem('token');
+      if (token) {
+        // Decodificar el token con el tipo personalizado
+        const decoded = jwtDecode<CustomJwtPayload>(token);
+        setNombre(decoded.nombre); // Ahora 'nombre' es reconocido como una propiedad válida
+      } else {
+        console.log('No se encontró el token');
+      }
+    };
+
+    obtenerNombre();
+  }, []);
+
 
 const navigation = useNavigation()
 
@@ -15,7 +52,7 @@ const navigation = useNavigation()
 
 
 
-        <Text style={estilo.titulo}>Hola Erisssssc...</Text>
+        <Text style={estilo.titulo}>{nombre ? `Hola ${nombre}...` : 'Hola...'}</Text>
 
         <Pressable style={estilo.btnCrear}
         onPress={()=>{navigation.navigate('Nuevo' as never)}}

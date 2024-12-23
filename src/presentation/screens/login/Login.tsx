@@ -59,6 +59,8 @@ const [autenticarUsuario] =useMutation(AUTENTICAR_USUARIO)
 
      
       const {token} = data.autenticarUsuario //extraemos el token
+
+      const nombre = data.autenticarUsuario.nombre
       console.log(token)
       //lo colocamos en storage
       await AsyncStorage.setItem('token', token)
@@ -103,7 +105,8 @@ const [autenticarUsuario] =useMutation(AUTENTICAR_USUARIO)
             placeholder="EMAIL"
             placeholderTextColor={'#000'}
             keyboardType="email-address"
-            onChangeText={text => setEmail(text)}
+            onChangeText={text => setEmail(text.toLowerCase())} //para q al escribir el email se escriba en minusculas(agregar el value de abajo)
+            value={email}
           />
 
           <View style={estilo.inputContainer}>
