@@ -1,5 +1,5 @@
 import React from 'react'
-import {StyleSheet, Text, View} from 'react-native'
+import {Pressable, StyleSheet, Text, View} from 'react-native'
 
 
 type ArchivoProps = {
@@ -8,9 +8,16 @@ type ArchivoProps = {
     sumario: string;
     proce: string;
   };
+  onLongPress: (id: string) => void; // Agregamos la función como prop
 };
 
-const Archivo = ({item}: ArchivoProps) => {
+
+const Archivo = ({item,onLongPress }: ArchivoProps) => {
+
+const {id} = item
+
+
+ 
 
 
   const {sumario, proce} = item
@@ -21,9 +28,11 @@ const Archivo = ({item}: ArchivoProps) => {
   return (
     <View style={e.caja}>
 
-  
+  <Pressable
+  onLongPress={ () => {onLongPress(id)}} //lo envoplvemos en una funcion
+  >
     <Text style={e.textoSumario}>{sumario}</Text>
-    
+    </Pressable>
 
     </View>
   )
