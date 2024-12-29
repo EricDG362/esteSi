@@ -1,10 +1,11 @@
-import React from 'react'
+import React,{useState}from 'react'
 import {
   Keyboard, SafeAreaView, StyleSheet, Text, TouchableWithoutFeedback, TextInput, FlatList,
   Alert,
 } from 'react-native'
 import { gql, useQuery, useMutation } from '@apollo/client'
 import Archivo from './Archivo'
+import { useNavigation } from '@react-navigation/native'
 
 
 
@@ -37,27 +38,35 @@ eliminarProcedimiento (id: $id){
 `
 
 
+// Define un tipo para los procedimientos
+type Procedimiento = {
+  id: string;
+  sumario: string;
+  proce: string;
+};
+
 const Archivos = () => {
+  const navi = useNavigation();
 
+  // Nuevo estado para manejar el texto del filtro
+  const [filtro, setFiltro] = useState('');
 
-  const { data, loading, error } = useQuery(OBTENER_PROCEDIMIENTOS) //en este caso es object distructuring
+  const { data, loading, error } = useQuery<{ obtenerProcedimientos: Procedimiento[] }>(OBTENER_PROCEDIMIENTOS);
+
   const [eliminarProcedimiento] = useMutation(ELIMINAR_PROCEDIMIENTO, {
     update(cache, { data: { eliminarProcedimiento } }) {
-
       const data = cache.readQuery<{
-        obtenerProcedimientos: Array<{ id: string; sumario: string; proce: string }>;
+        obtenerProcedimientos: Procedimiento[];
       }>({
         query: OBTENER_PROCEDIMIENTOS,
       });
 
       if (data?.obtenerProcedimientos) {
-
-        // Filtra el procedimiento eliminado
         const procedimientosRestantes = data.obtenerProcedimientos.filter(
           (procedimiento) => procedimiento.id !== eliminarProcedimiento.id
         );
 
-        cache.writeQuery({ //aca vuleve a escribir el cache
+        cache.writeQuery({
           query: OBTENER_PROCEDIMIENTOS,
           data: {
             obtenerProcedimientos: procedimientosRestantes,
@@ -65,7 +74,7 @@ const Archivos = () => {
         });
       }
     },
-  }); //para eliminar proce
+  });
 
   if (loading) return <Text style={e.titulo}>Cargando...</Text>;
 
@@ -74,9 +83,6 @@ const Archivos = () => {
     return <Text style={e.titulo}>Error al cargar datos</Text>;
   }
 
-
-
-  // Maneja el evento `onLongPress`
   const mensajeEliminarProce = (id: string) => {
     Alert.alert(
       'Confirmación',
@@ -89,67 +95,59 @@ const Archivos = () => {
   };
 
   const EliminarProce = async (id: string) => {
-    console.log('ID enviado a la mutación desde eliminarProce:', id); // Verifica este valor
-
-
-    if (!id) {
-      console.error('Error: El ID no es válido.');
-      Alert.alert('Error', 'El ID del procedimiento no es válido.');
-      return;
-    }
-
     try {
-      const { data } = await eliminarProcedimiento({
+      await eliminarProcedimiento({
         variables: { id },
       });
-
-      Alert.alert('Eliminado',
-        'Procedimiento Eliminado con Exito!!!',
-        [{ text: 'Ok' }])
-      console.log('Respuesta de la eliminación:', data);
-      // Refresca la lista de procedimientos
+      Alert.alert('Eliminado', 'Procedimiento Eliminado con Éxito!', [{ text: 'Ok' }]);
     } catch (error) {
       console.error('Error al eliminar el procedimiento:', error);
       Alert.alert('Error', 'No se pudo eliminar el procedimiento. Inténtalo nuevamente.');
     }
   };
 
+  const abrirNuevo = (id: string, proce: string, sumario: string) => {
+    navi.navigate('Nuevo' as never);
+  };
 
-
+  // Filtrar los procedimientos basados en el texto del filtro
+  const procedimientosFiltrados = data?.obtenerProcedimientos.filter((proc: Procedimiento) =>
+    proc.sumario.toLowerCase().includes(filtro.toLowerCase())
+  );
 
   return (
-
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
       <SafeAreaView style={e.container}>
-
         <Text style={e.titulo}>Procedimientos</Text>
 
+        {/* Input de filtro */}
         <TextInput
           style={e.input}
-          placeholder='N° de SUMARIO'
+          placeholder="N° de SUMARIO"
           keyboardType="default"
-
+          value={filtro} // Vincula el estado del filtro
+          onChangeText={(text) => setFiltro(text)} // Actualiza el estado cuando el usuario escribe
         />
 
-
+        {/* FlatList muestra procedimientos filtrados */}
         <FlatList
-
-          data={data?.obtenerProcedimientos || []} // Array de datos
-          renderItem={({ item }) =>
-            <Archivo item={item}
-              onLongPress={mensajeEliminarProce} //aca rescata el onlongporess de archivo.tsx y llma lam funcion eliminarproce
-            />} // Pasamos cada `item` al componente Archivo
-          keyExtractor={(item) => item.id} // Clave única para cada elemento
-          ListEmptyComponent={<Text style={e.titulo}>No hay procedimientos disponibles</Text>} //si no hay q muestre esto
+          data={procedimientosFiltrados || []} // Usa los procedimientos filtrados
+          renderItem={({ item }) => (
+            <Archivo
+              item={item}
+              onLongPress={mensajeEliminarProce}
+              onPress={abrirNuevo}
+            />
+          )}
+          keyExtractor={(item) => item.id}
+          ListEmptyComponent={
+            <Text style={e.titulo}>No hay procedimientos disponibles</Text>
+          }
         />
-
-
-
-
       </SafeAreaView>
     </TouchableWithoutFeedback>
-  )
-}
+  );
+};
 
 
 const e = StyleSheet.create({

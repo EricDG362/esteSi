@@ -9,10 +9,11 @@ type ArchivoProps = {
     proce: string;
   };
   onLongPress: (id: string) => void; // Agregamos la función como prop
+  onPress: (id: string, proce: string, sumario:string) => void
 };
 
 
-const Archivo = ({ item, onLongPress }: ArchivoProps) => {
+const Archivo = ({ item, onLongPress, onPress }: ArchivoProps) => {
 
   const { id } = item
 
@@ -28,6 +29,7 @@ const Archivo = ({ item, onLongPress }: ArchivoProps) => {
   return (
     <Pressable
       onLongPress={() => { onLongPress(id) }} //lo envoplvemos en una funcion
+      onPress={() => {onPress (id,proce,sumario)}}
     >
 
       <View style={e.caja}>
