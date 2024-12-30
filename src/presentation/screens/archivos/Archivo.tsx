@@ -7,9 +7,10 @@ type ArchivoProps = {
     id: string;
     sumario: string;
     proce: string;
+    fecha: Date;
   };
   onLongPress: (id: string) => void; // Agregamos la función como prop
-  onPress: (id: string, proce: string, sumario:string) => void
+  onPress: (id: string, proce: string, sumario:string, fecha:Date) => void
 };
 
 
@@ -21,15 +22,17 @@ const Archivo = ({ item, onLongPress, onPress }: ArchivoProps) => {
 
 
 
-  const { sumario, proce } = item
+  const { sumario, proce, fecha } = item
 
+console.log(`desde archivo la fecha es ${fecha}`)
+console.log(`desde archivo el proce es ${proce}`)
 
 
 
   return (
     <Pressable
       onLongPress={() => { onLongPress(id) }} //lo envoplvemos en una funcion
-      onPress={() => {onPress (id,proce,sumario)}}
+      onPress={() => {onPress (id,proce,sumario,fecha)}}
     >
 
       <View style={e.caja}>
@@ -43,6 +46,8 @@ const Archivo = ({ item, onLongPress, onPress }: ArchivoProps) => {
 
 
 const e = StyleSheet.create({
+
+  
   caja: {
 
     backgroundColor: '#fff',

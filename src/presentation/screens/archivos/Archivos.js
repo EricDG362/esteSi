@@ -12,7 +12,9 @@ import {
 } from 'react-native';
 import { gql, useQuery, useMutation } from '@apollo/client';
 import Archivo from './Archivo';
-import { useNavigation } from '@react-navigation/native';
+import { StackActions, useNavigation } from '@react-navigation/native';
+import LinearGradient from 'react-native-linear-gradient';
+
 
 const OBTENER_PROCEDIMIENTOS = gql`
   query obtenerProcedimientos {
@@ -20,6 +22,8 @@ const OBTENER_PROCEDIMIENTOS = gql`
       id
       sumario
       proce
+      fecha
+
     }
   }
 `;
@@ -90,9 +94,9 @@ const Archivos = () => {
         }
     };
 
-    const abrirNuevo = (id, procedi, sumarios) => {
-        console.log(`desde archivos ${sumarios} proce ${procedi} y id ${id}`)
-        navi.navigate('Nuevo', { id: id || null, procedi: procedi || null, sumarios: sumarios || null });
+    const abrirNuevo = (id, procedi, sumarios, fechas) => {
+        console.log(`desde archivos ${sumarios} proce ${procedi} y id ${id} fecha ${fechas}`)
+        navi.navigate('Nuevo', { id: id || null, procedi: procedi || null, sumarios: sumarios || null, fechas:fechas||null });
     };
 
     // Filtrar los procedimientos basados en el texto del filtro
@@ -101,9 +105,22 @@ const Archivos = () => {
             proc.sumario.toLowerCase().includes(filtro.toLowerCase())
         ) || [];
 
+
+
+
+
+
+
+
+
     return (
         <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-            <SafeAreaView style={styles.container}>
+                    <LinearGradient
+        colors={['#000000', '#013220']} // Negro a verde oscuro
+        locations={[0.2, 1]} // El negro ocupa el 30% y el verde oscuro empieza desde ahí hasta el final
+        style={styles.fondo}
+      >
+            <SafeAreaView   style={styles.container}>
                 <Text style={styles.titulo}>Procedimientos</Text>
 
                 {/* Input de filtro */}
@@ -131,21 +148,19 @@ const Archivos = () => {
                     }
                 />
 
-                <Pressable
-                    style={[styles.boton, styles.btnCancelar]}
-                    onPress={() => navi.navigate('NavegacionTop')}
-                >
-                    <Text style={styles.BotonText}>SALIR</Text>
-                </Pressable>
+       
 
             </SafeAreaView>
+            </LinearGradient>
         </TouchableWithoutFeedback>
     );
 };
 
 const styles = StyleSheet.create({
+    fondo: {
+        flex: 1
+    },
     container: {
-        backgroundColor: '#8A2BE2',
         flex: 1,
         alignItems: 'center',
     },
@@ -155,6 +170,7 @@ const styles = StyleSheet.create({
         fontWeight: '900',
         fontSize: 20,
         marginTop: 30,
+        color: '#fff'
     },
     input: {
         backgroundColor: '#FFF',
@@ -164,6 +180,7 @@ const styles = StyleSheet.create({
         paddingVertical: 15,
         paddingHorizontal: 15,
         borderRadius: 15,
+        textAlign:'center'
     },
     boton: {
         backgroundColor: 'cyan',

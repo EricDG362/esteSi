@@ -9,9 +9,17 @@ import {
     TextInput,
     Pressable,
     Alert,
+    View,
+    Button,
+    TouchableOpacity
 } from 'react-native';
 
 import { gql, useMutation } from '@apollo/client';
+import LinearGradient from 'react-native-linear-gradient';
+import DatePicker from 'react-native-date-picker';
+import { format } from 'date-fns'; //  librería para formatear la fecha
+
+
 
 const NUEVO_PROCEDIMIENTO = gql`
   mutation nuevoProcedimiento($input: ProcedimientoInput) {
@@ -19,6 +27,7 @@ const NUEVO_PROCEDIMIENTO = gql`
       sumario
       proce
       id
+      fecha
     }
   }
 `;
@@ -29,6 +38,7 @@ const OBTENER_PROCEDIMIENTOS = gql`
     obtenerProcedimientos {
       sumario
       proce
+      fecha
       id
     }
   }
@@ -39,6 +49,7 @@ const ACTUALIZAR_PROCEDIMIENTO = gql`
     actualizarProcedimiento(id: $id, input: $input) {
       sumario
       proce
+      fecha
     }
   }
 `;
@@ -50,14 +61,28 @@ const Nuevo = () => {
     const navi = useNavigation();
 
     // Desestructurando los parámetros pasados, con valores por defecto
-    const { id: idFromRoute, procedi: proceFromRoute, sumarios: sumarioFromRoute } = params || {};
+    const { id: idFromRoute, procedi: proceFromRoute, sumarios: sumarioFromRoute, fechas: fechasFromRoute } = params || {};
 
-    console.log(`desde nuevo el d ${idFromRoute}`)
+    //date Piker
+    const [date, setDate] = useState(new Date() || fechasFromRoute)
+    const [open, setOpen] = useState(false)
+
+    const fechaParaMostar = format(date,'dd/MM/yyyy')
+    console.log(`desde nuevo fecha ${fechasFromRoute}`)
+
+    console.log(`desde nuevo el id ${idFromRoute}`)
     const [sumario, setSumario] = useState(sumarioFromRoute || '');
     const [proce, setProce] = useState(proceFromRoute || '');
     const [id, setId] = useState(idFromRoute || null);
 
+    // Formateamos la fecha para mostrar solo la parte de la fecha
+    const FechaFormateada = date.toISOString(); // Formato poara graopql
+    console.log(`fecha ${date}`)
+    console.log(`fecha desde formateo ${FechaFormateada}`)
 
+
+
+    //mutation
     const [nuevoProcedimiento] = useMutation(NUEVO_PROCEDIMIENTO, {
         update(cache, { data: { nuevoProcedimiento } }) {
             const data = cache.readQuery({
@@ -90,18 +115,18 @@ const Nuevo = () => {
                     data: {
                         obtenerProcedimientos: [...data.obtenerProcedimientos, actualizarProcedimiento],
                     },
-                    
+
                 });
             }
         },
     })
- 
-      
-    
-    
-    
-    
- 
+
+
+
+
+
+
+
 
     const guardarProce = async () => {
 
@@ -121,6 +146,7 @@ const Nuevo = () => {
                     input: {
                         sumario,
                         proce,
+                        fecha: FechaFormateada
                     },
                 },
             });
@@ -141,8 +167,8 @@ const Nuevo = () => {
     };
 
     const actualizarProce = async () => {
-         //validacion
-         if ([sumario, proce].includes('')) {
+        //validacion
+        if ([sumario, proce].includes('')) {
             Alert.alert(
                 'Error',
                 'Todos los campos son obligatorios (ingrese 0 si aún no tiene N° de sumario)',
@@ -153,7 +179,7 @@ const Nuevo = () => {
 
         try {
 
-        console.log('ID enviado:', id);
+            console.log('ID enviado:', id);
             const { data } = await actualizarProcedimiento({
 
                 variables: {
@@ -161,6 +187,7 @@ const Nuevo = () => {
                     input: {
                         sumario,
                         proce,
+                        fecha: FechaFormateada
                     },
                 },
             });
@@ -181,55 +208,125 @@ const Nuevo = () => {
     };
 
 
-    
+
+
+
 
     return (
         <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-            <SafeAreaView style={styles.container}>
-                <Text style={styles.titulo}>Nuevo Procedimiento</Text>
+            <LinearGradient
+                colors={['#000000', '#025C48']} // Negro a verde oscuro
+                locations={[0.2, 1]} // El negro ocupa el 30% y el verde oscuro empieza desde ahí hasta el final
+                style={styles.fondo}
+            >
+                <SafeAreaView style={styles.container}>
+                    <Text style={styles.titulo}>Nuevo Procedimiento</Text>
 
-                <TextInput
-                    style={styles.input}
-                    placeholder="N° SUMARIO"
-                    keyboardType="default"
-                    value={sumario}
-                    onChangeText={(text) => setSumario(text)}
-                />
+                    <TextInput
+                        style={styles.input}
+                        placeholder="N° SUMARIO"
+                        keyboardType="default"
+                        value={sumario}
+                        onChangeText={(text) => setSumario(text)}
+                    />
 
-                <TextInput
-                    style={[styles.textarea, styles.area]}
-                    placeholder="INGRESE SU PROCEDIMIENTO"
-                    keyboardType="default"
-                    multiline={true}
-                    numberOfLines={10}
-                    textAlignVertical="top"
-                    value={proce}
-                    onChangeText={(text) => setProce(text)}
-                />
-                {(id) ? //si id trae algo mostrar actualizar
-                    <Pressable style={styles.boton} onPress={actualizarProce}>
-                        <Text style={styles.BotonText}>ACTUALIZAR</Text> 
-                    </Pressable>
-                    : //de lom contrario guardar
-                    <Pressable style={styles.boton} onPress={guardarProce}>
-                        <Text style={styles.BotonText}>GUARDAR</Text>
-                    </Pressable>
-                }
+                    <TextInput
+                        style={[styles.textarea, styles.area]}
+                        placeholder="INGRESE SU PROCEDIMIENTO"
+                        keyboardType="default"
+                        multiline={true}
+                        numberOfLines={10}
+                        textAlignVertical="top"
+                        value={proce}
+                        onChangeText={(text) => setProce(text)}
+                    />
 
-                <Pressable
-                    style={[styles.boton, styles.btnCancelar]}
-                    onPress={() => navi.navigate('NavegacionTop')}
-                >
-                    <Text style={styles.BotonText}>CANCELAR</Text>
-                </Pressable>
-            </SafeAreaView>
+                    {/* //FECHAAAA */}
+
+                    {(id) ?
+                        <Text style={[styles.BotonText, { color: "#FFFF" }]}>CON FECHA:    {fechaParaMostar}</Text>
+                        :
+                        <View >
+                            <TouchableOpacity
+                                style={styles.pickerBOTON}
+                                onPress={() => setOpen(true)}
+                            >
+                                <Text style={[styles.BotonText, { color: "#FFFF" }]}>SELECCIONE FECHA</Text>
+                            </TouchableOpacity>
+                            <DatePicker
+                                modal
+                                open={open}
+                                date={date}
+                                locale='es'
+                                onConfirm={(date) => {
+                                    setOpen(false)
+                                    setDate(date)
+                                }}
+                                onCancel={() => {
+                                    setOpen(false)
+                                }}
+                            />
+                        </View>
+
+
+
+                    }
+
+
+
+
+                    {(id) ? //si id trae algo mostrar actualizar
+                        <Pressable style={styles.boton} onPress={actualizarProce}>
+                            <Text style={styles.BotonText}>ACTUALIZAR</Text>
+                        </Pressable>
+                        : //de lom contrario guardar
+                        <Pressable style={styles.boton} onPress={guardarProce}>
+                            <Text style={styles.BotonText}>GUARDAR</Text>
+                        </Pressable>
+                    }
+                    {(id) ?
+                        <Pressable
+                            style={[styles.boton, styles.btnCancelar]}
+                            onPress={() => navi.dispatch(StackActions.pop(1))}
+                        >
+                            <Text style={styles.BotonText}>CANCELAR</Text>
+                        </Pressable>
+                        :
+                        <Pressable
+                            style={[styles.boton, styles.btnCancelar]}
+                            onPress={() => navi.navigate('NavegacionTop')}
+                        >
+                            <Text style={styles.BotonText}>CANCELAR</Text>
+                        </Pressable>
+                    }
+
+
+
+                    <TouchableOpacity
+                        style={[styles.pickerBOTON, { marginTop: 80 }, { paddingHorizontal: 20 }, { paddingVertical: 20 }, { borderColor: "#32CD32" }]}
+                        onPress={() => setOpen(true)}
+                    >
+                        <Text style={[styles.BotonText, { color: "#32CD32" }]}>SELECCIONE FECHA</Text>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity
+                        style={[styles.pickerBOTON, { marginTop: 20 }, { paddingHorizontal: 20 }, { paddingVertical: 20 }, { borderColor: "#f42" }]}
+                        onPress={() => setOpen(true)}
+                    >
+                        <Text style={[styles.BotonText, { color: "#f42" }]}>SELECCIONE FECHA</Text>
+                    </TouchableOpacity>
+
+                </SafeAreaView>
+            </LinearGradient>
         </TouchableWithoutFeedback>
     );
 };
 
 const styles = StyleSheet.create({
+    fondo: {
+        flex: 1
+    },
     container: {
-        backgroundColor: '#8A2BE2',
         flex: 1,
         alignItems: 'center',
     },
@@ -238,26 +335,46 @@ const styles = StyleSheet.create({
         textTransform: 'uppercase',
         fontWeight: '900',
         fontSize: 20,
-        marginTop: 30,
+        marginTop: 20,
+        color: '#ffff'
     },
     input: {
         backgroundColor: '#FFF',
         width: '60%',
-        marginTop: 40,
+        marginTop: 30,
         paddingVertical: 15,
         paddingHorizontal: 15,
         borderRadius: 15,
+        textAlign: 'center'
     },
     textarea: {
-        backgroundColor: '#FFF',
+        backgroundColor: '#FFFf',
         width: '80%',
         paddingVertical: 15,
         paddingHorizontal: 15,
         borderRadius: 15,
+        fontSize: 18, // Tamaño de la fuente
+        fontStyle: 'italic',
+        fontWeight: '500', // Peso de la fuente (normal, bold, e
     },
     area: {
         marginTop: 20,
-        height: 400,
+        height: 100,
+    },
+    pickerBOTON: {
+        backgroundColor: 'transparent',
+        paddingVertical: 10,
+        borderRadius: 30,
+        marginTop: 10,
+        paddingHorizontal: 20,
+        width: '70%',
+        alignItems: 'center',
+        borderWidth: 2, // Definir el grosor del borde
+        borderColor: '#f3f3f3',
+
+        fontWeight: '800',
+        textAlign: 'center',
+
     },
     boton: {
         backgroundColor: 'cyan',
@@ -271,9 +388,10 @@ const styles = StyleSheet.create({
     BotonText: {
         fontWeight: '800',
         textAlign: 'center',
+        color: '#000'
     },
     btnCancelar: {
-        marginTop: 40,
+        marginTop: 20,
         backgroundColor: 'red',
     },
 });

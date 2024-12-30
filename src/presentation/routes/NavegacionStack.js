@@ -17,8 +17,8 @@ const NavegacionStack = () => {
   return (
    
     <Stack.Navigator initialRouteName="Login"
-                    screenOptions={{headerStyle: {backgroundColor:'#0E3194'}, 
-                                  headerTitleStyle:{fontWeight:'bold', color: '#FFFFFF',},
+                    screenOptions={{headerStyle: {backgroundColor:'#000000'}, 
+                                  headerTitleStyle:{fontWeight:'500', color: '#FFFFFF',fontSize:20},
                                 }} 
     >
       <Stack.Screen 

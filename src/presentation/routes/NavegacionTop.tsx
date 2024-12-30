@@ -16,10 +16,10 @@ const NavegacionTop = () => {
     
     <Tab.Navigator
     screenOptions={{
-      tabBarStyle: { backgroundColor: '#0E3194' }, // Color de fondo de la barra
-      tabBarLabelStyle: { color: '#FFFFFF' }, // Color del texto de las etiquetas
+      tabBarStyle: { backgroundColor: '#000000' }, // Color de fondo de la barra
+      tabBarLabelStyle: { color: '#FFFFFF', fontSize:20, fontWeight:'800' }, // Color del texto de las etiquetas
       tabBarActiveTintColor: '#FFFFFF', // Color del ítem activo
-      tabBarInactiveTintColor: '#FFFFFF', // Color del ítem inactivo (opcional, si quieres el mismo)
+      tabBarInactiveTintColor: '#000000', // Color del ítem inactivo (opcional, si quieres el mismo)
     }}
     >
 
