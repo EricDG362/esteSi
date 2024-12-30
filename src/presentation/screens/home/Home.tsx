@@ -1,5 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useNavigation } from '@react-navigation/native'
+import { useNavigation, useRoute } from '@react-navigation/native'
 import React, { useEffect, useState } from 'react'
 import { SafeAreaView, Keyboard, Pressable, StyleSheet, Text, TouchableWithoutFeedback, View } from 'react-native'
 import {jwtDecode} from 'jwt-decode';
@@ -22,6 +22,8 @@ interface CustomJwtPayload {
 
 
 const Home = () => {
+
+ 
 
   const [nombre, setNombre] = useState<string | null>(null);
 
