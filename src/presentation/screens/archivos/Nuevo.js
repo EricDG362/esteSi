@@ -34,6 +34,16 @@ const OBTENER_PROCEDIMIENTOS = gql`
   }
 `;
 
+const ACTUALIZAR_PROCEDIMIENTO = gql`
+  mutation actualizarProcedimiento($id: ID!, $input: ProcedimientoInput) {
+    actualizarProcedimiento(id: $id, input: $input) {
+      sumario
+      proce
+    }
+  }
+`;
+
+
 const Nuevo = () => {
 
     const { params } = useRoute();
@@ -42,6 +52,7 @@ const Nuevo = () => {
     // Desestructurando los parámetros pasados, con valores por defecto
     const { id: idFromRoute, procedi: proceFromRoute, sumarios: sumarioFromRoute } = params || {};
 
+    console.log(`desde nuevo el d ${idFromRoute}`)
     const [sumario, setSumario] = useState(sumarioFromRoute || '');
     const [proce, setProce] = useState(proceFromRoute || '');
     const [id, setId] = useState(idFromRoute || null);
@@ -63,9 +74,38 @@ const Nuevo = () => {
             }
         },
     });
+    const [actualizarProcedimiento] = useMutation(ACTUALIZAR_PROCEDIMIENTO, {
+        update(cache, { data: { actualizarProcedimiento } }) {
+            console.log('Procedimiento actualizado:', actualizarProcedimiento);
 
+            const data = cache.readQuery({
+                query: OBTENER_PROCEDIMIENTOS,
+            });
+
+            console.log('Datos en el caché antes de la actualización:', data);
+
+            if (data?.obtenerProcedimientos) {
+                cache.writeQuery({
+                    query: OBTENER_PROCEDIMIENTOS,
+                    data: {
+                        obtenerProcedimientos: [...data.obtenerProcedimientos, actualizarProcedimiento],
+                    },
+                    
+                });
+            }
+        },
+    })
+ 
+      
+    
+    
+    
+    
+ 
 
     const guardarProce = async () => {
+
+        //validacion
         if ([sumario, proce].includes('')) {
             Alert.alert(
                 'Error',
@@ -100,6 +140,49 @@ const Nuevo = () => {
         }
     };
 
+    const actualizarProce = async () => {
+         //validacion
+         if ([sumario, proce].includes('')) {
+            Alert.alert(
+                'Error',
+                'Todos los campos son obligatorios (ingrese 0 si aún no tiene N° de sumario)',
+                [{ text: 'Aceptar' }]
+            );
+            return;
+        }
+
+        try {
+
+        console.log('ID enviado:', id);
+            const { data } = await actualizarProcedimiento({
+
+                variables: {
+                    id,
+                    input: {
+                        sumario,
+                        proce,
+                    },
+                },
+            });
+
+            Alert.alert('Guardado', 'Procedimiento Actualizado con Éxito!!!', [{ text: 'Aceptar' }]);
+            navi.navigate('Archivos');
+        } catch (error) {
+            let errorMessage = '';
+
+            if (error?.graphQLErrors?.length) {
+                errorMessage = error.graphQLErrors[0].message || error.message;
+            } else if (error instanceof Error) {
+                errorMessage = error.message;
+            }
+
+            Alert.alert('Error', errorMessage);
+        }
+    };
+
+
+    
+
     return (
         <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
             <SafeAreaView style={styles.container}>
@@ -123,14 +206,19 @@ const Nuevo = () => {
                     value={proce}
                     onChangeText={(text) => setProce(text)}
                 />
-
-                <Pressable style={styles.boton} onPress={guardarProce}>
-                    <Text style={styles.BotonText}>GUARDAR</Text>
-                </Pressable>
+                {(id) ? //si id trae algo mostrar actualizar
+                    <Pressable style={styles.boton} onPress={actualizarProce}>
+                        <Text style={styles.BotonText}>ACTUALIZAR</Text> 
+                    </Pressable>
+                    : //de lom contrario guardar
+                    <Pressable style={styles.boton} onPress={guardarProce}>
+                        <Text style={styles.BotonText}>GUARDAR</Text>
+                    </Pressable>
+                }
 
                 <Pressable
                     style={[styles.boton, styles.btnCancelar]}
-                    onPress={() => navi.dispatch(StackActions.pop(1))}
+                    onPress={() => navi.navigate('NavegacionTop')}
                 >
                     <Text style={styles.BotonText}>CANCELAR</Text>
                 </Pressable>

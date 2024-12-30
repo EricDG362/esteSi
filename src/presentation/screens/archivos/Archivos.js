@@ -8,6 +8,7 @@ import {
     TextInput,
     FlatList,
     Alert,
+    Pressable
 } from 'react-native';
 import { gql, useQuery, useMutation } from '@apollo/client';
 import Archivo from './Archivo';
@@ -91,7 +92,7 @@ const Archivos = () => {
 
     const abrirNuevo = (id, procedi, sumarios) => {
         console.log(`desde archivos ${sumarios} proce ${procedi} y id ${id}`)
-        navi.navigate('Nuevo', { id: id || null, procedi: procedi || null,sumarios: sumarios||null});
+        navi.navigate('Nuevo', { id: id || null, procedi: procedi || null, sumarios: sumarios || null });
     };
 
     // Filtrar los procedimientos basados en el texto del filtro
@@ -129,6 +130,14 @@ const Archivos = () => {
                         <Text style={styles.titulo}>No hay procedimientos disponibles</Text>
                     }
                 />
+
+                <Pressable
+                    style={[styles.boton, styles.btnCancelar]}
+                    onPress={() => navi.navigate('NavegacionTop')}
+                >
+                    <Text style={styles.BotonText}>SALIR</Text>
+                </Pressable>
+
             </SafeAreaView>
         </TouchableWithoutFeedback>
     );
@@ -155,6 +164,23 @@ const styles = StyleSheet.create({
         paddingVertical: 15,
         paddingHorizontal: 15,
         borderRadius: 15,
+    },
+    boton: {
+        backgroundColor: 'cyan',
+        paddingVertical: 20,
+        borderRadius: 30,
+        marginTop: 20,
+        paddingHorizontal: 20,
+        width: '70%',
+        alignItems: 'center',
+    },
+    BotonText: {
+        fontWeight: '800',
+        textAlign: 'center',
+    },
+    btnCancelar: {
+        marginBottom: 10,
+        backgroundColor: 'red',
     },
 });
 
