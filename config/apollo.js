@@ -13,7 +13,7 @@ const httpLink = createHttpLink({
 const authLink = setContext(async (_, { headers }) => {
   try {
     const token = await AsyncStorage.getItem('token');
-    console.log('Token desde AsyncStorage:', token);
+   
     return {
       headers: {
         ...headers,

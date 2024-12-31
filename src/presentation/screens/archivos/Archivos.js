@@ -95,7 +95,7 @@ const Archivos = () => {
     };
 
     const abrirNuevo = (id, procedi, sumarios, fechas) => {
-        console.log(`desde archivos ${sumarios} proce ${procedi} y id ${id} fecha ${fechas}`)
+       
         navi.navigate('Nuevo', { id: id || null, procedi: procedi || null, sumarios: sumarios || null, fechas:fechas||null });
     };
 

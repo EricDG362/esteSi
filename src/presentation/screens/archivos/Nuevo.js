@@ -63,22 +63,29 @@ const Nuevo = () => {
     // Desestructurando los parámetros pasados, con valores por defecto
     const { id: idFromRoute, procedi: proceFromRoute, sumarios: sumarioFromRoute, fechas: fechasFromRoute } = params || {};
 
+
     //date Piker
     const [date, setDate] = useState(new Date() || fechasFromRoute)
     const [open, setOpen] = useState(false)
 
-    const fechaParaMostar = format(date,'dd/MM/yyyy')
-    console.log(`desde nuevo fecha ${fechasFromRoute}`)
+   
+     const nuevafecha = fechasFromRoute
 
-    console.log(`desde nuevo el id ${idFromRoute}`)
+
+     // Formato deseado
+     let fechaParaM = '';
+     if (nuevafecha !== undefined && nuevafecha !== null) {
+        fechaParaM = format(new Date(nuevafecha), 'dd/MM/yyyy');
+    }
+        
+    
     const [sumario, setSumario] = useState(sumarioFromRoute || '');
     const [proce, setProce] = useState(proceFromRoute || '');
     const [id, setId] = useState(idFromRoute || null);
 
-    // Formateamos la fecha para mostrar solo la parte de la fecha
-    const FechaFormateada = date.toISOString(); // Formato poara graopql
-    console.log(`fecha ${date}`)
-    console.log(`fecha desde formateo ${FechaFormateada}`)
+   
+    const FechaFormateada = date.toISOString(); // Formato poara graphql
+
 
 
 
@@ -135,6 +142,16 @@ const Nuevo = () => {
             Alert.alert(
                 'Error',
                 'Todos los campos son obligatorios (ingrese 0 si aún no tiene N° de sumario)',
+                [{ text: 'Aceptar' }]
+            );
+            return;
+        }
+
+         //validacion fecha
+         if ([date].includes('')) {
+            Alert.alert(
+                'Error',
+                'Seleccione una Fecha)',
                 [{ text: 'Aceptar' }]
             );
             return;
@@ -243,8 +260,8 @@ const Nuevo = () => {
 
                     {/* //FECHAAAA */}
 
-                    {(id) ?
-                        <Text style={[styles.BotonText, { color: "#FFFF" }]}>CON FECHA:    {fechaParaMostar}</Text>
+                    {(fechasFromRoute) ?
+                        <Text style={[styles.BotonText, { color: "#FFFF" }]}>CON FECHA: {fechaParaM}     </Text>
                         :
                         <View >
                             <TouchableOpacity
@@ -306,7 +323,7 @@ const Nuevo = () => {
                         style={[styles.pickerBOTON, { marginTop: 80 }, { paddingHorizontal: 20 }, { paddingVertical: 20 }, { borderColor: "#32CD32" }]}
                         onPress={() => setOpen(true)}
                     >
-                        <Text style={[styles.BotonText, { color: "#32CD32" }]}>SELECCIONE FECHA</Text>
+                        <Text style={[styles.BotonText, { color: "#ffff" },{fontWeight:'900'}]}>SELECCIONE FECHA</Text>
                     </TouchableOpacity>
 
                     <TouchableOpacity

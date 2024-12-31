@@ -61,7 +61,7 @@ const [autenticarUsuario] =useMutation(AUTENTICAR_USUARIO)
       const {token} = data.autenticarUsuario //extraemos el token
 
       const nombre = data.autenticarUsuario.nombre
-      console.log(token)
+     
       //lo colocamos en storage
       await AsyncStorage.setItem('token', token)
       //direccionamos a donde necesitamos (al inicio)

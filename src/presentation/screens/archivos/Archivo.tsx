@@ -18,16 +18,7 @@ const Archivo = ({ item, onLongPress, onPress }: ArchivoProps) => {
 
   const { id } = item
 
-
-
-
-
   const { sumario, proce, fecha } = item
-
-console.log(`desde archivo la fecha es ${fecha}`)
-console.log(`desde archivo el proce es ${proce}`)
-
-
 
   return (
     <Pressable
