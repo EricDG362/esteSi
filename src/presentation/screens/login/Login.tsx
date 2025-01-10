@@ -96,7 +96,7 @@ const [autenticarUsuario] =useMutation(AUTENTICAR_USUARIO)
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       >
         <ImageBackground
-          source={require('../../../asset/img/ab.jpg')}
+          source={require('../../../../assets/img/cd.jpg')}
           style={estilo.background}
           resizeMode="cover"
         >

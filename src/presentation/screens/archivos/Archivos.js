@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
     Keyboard,
     SafeAreaView,
@@ -8,11 +8,11 @@ import {
     TextInput,
     FlatList,
     Alert,
-    Pressable
+    Animated
 } from 'react-native';
 import { gql, useQuery, useMutation } from '@apollo/client';
 import Archivo from './Archivo';
-import { StackActions, useNavigation } from '@react-navigation/native';
+import { StackActions, useFocusEffect, useNavigation } from '@react-navigation/native';
 import LinearGradient from 'react-native-linear-gradient';
 
 
@@ -39,11 +39,19 @@ const ELIMINAR_PROCEDIMIENTO = gql`
   }
 `;
 
+
+
+
+
+
+
 const Archivos = () => {
     const navi = useNavigation();
 
     // Estado para manejar el texto del filtro
     const [filtro, setFiltro] = useState('');
+
+   
 
     const { data, loading, error } = useQuery(OBTENER_PROCEDIMIENTOS);
 
@@ -76,7 +84,7 @@ const Archivos = () => {
     }
 
     const mensajeEliminarProce = (id) => {
-        Alert.alert('Confirmación', '¿Deseas eliminar este Procedimiento?', [
+        Alert.alert('¿Deseas Eliminar este Procedimiento?', 'Si se elimina no se podra recuperar', [
             { text: 'Cancelar', style: 'cancel' },
             { text: 'Eliminar', onPress: () => EliminarProce(id) },
         ]);
@@ -94,6 +102,8 @@ const Archivos = () => {
         }
     };
 
+
+
     const abrirNuevo = (id, procedi, sumarios, fechas) => {
        
         navi.navigate('Nuevo', { id: id || null, procedi: procedi || null, sumarios: sumarios || null, fechas:fechas||null });
@@ -108,20 +118,15 @@ const Archivos = () => {
 
 
 
-
-
-
-
-
     return (
         <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
                     <LinearGradient
         colors={['#000000', '#013220']} // Negro a verde oscuro
-        locations={[0.2, 1]} // El negro ocupa el 30% y el verde oscuro empieza desde ahí hasta el final
+        locations={[0.005, 1]} // El negro ocupa el 30% y el verde oscuro empieza desde ahí hasta el final
         style={styles.fondo}
       >
             <SafeAreaView   style={styles.container}>
-                <Text style={styles.titulo}>Procedimientos</Text>
+                <Animated.Text style={styles.titulo}>Procedimientos</Animated.Text>
 
                 {/* Input de filtro */}
                 <TextInput
@@ -140,6 +145,7 @@ const Archivos = () => {
                             item={item}
                             onLongPress={mensajeEliminarProce}
                             onPress={abrirNuevo}
+                        
                         />
                     )}
                     keyExtractor={(item) => item.id}
@@ -168,9 +174,9 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         textTransform: 'uppercase',
         fontWeight: '900',
-        fontSize: 20,
         marginTop: 30,
-        color: '#fff'
+        color: '#fff',
+        fontSize:20
     },
     input: {
         backgroundColor: '#FFF',

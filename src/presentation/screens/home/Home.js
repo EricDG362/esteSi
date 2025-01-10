@@ -8,6 +8,7 @@ import {
   StyleSheet,
   Text,
   TouchableWithoutFeedback,
+  Animated
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import { jwtDecode } from 'jwt-decode';
@@ -22,7 +23,7 @@ const Home = () => {
         console.log('Token encontrado:', token);
         try {
           const decoded = jwtDecode(token);
-          
+
           setNombre(decoded.nombre);  // Actualizando el estado con el nombre
         } catch (error) {
           console.error('Error al decodificar el token:', error);
@@ -39,6 +40,19 @@ const Home = () => {
 
   const navigation = useNavigation();
 
+  //animacion
+  const animacion = useState(new Animated.Value(0.4))[0]; // Inicializa el valor animado
+
+  useEffect(() => {
+    Animated.timing(
+      animacion, {
+      toValue: 1, //q valla a 40
+      duration: 500, //q dure 1/2 segundo
+      useNativeDriver: true,
+    }
+    ).start();
+  }, [])
+
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
       <LinearGradient
@@ -48,7 +62,7 @@ const Home = () => {
       >
         <SafeAreaView style={estilo.container}>
           {nombre ? (
-            <Text style={estilo.titulo}>Hola, ... {nombre}!!</Text>
+            <Animated.Text style={[estilo.titulo, { transform: [{ scale: animacion }] }]}>Hola... {nombre}!!</Animated.Text>
           ) : (
             <Text style={estilo.titulo}>Cargando...</Text>
           )}
@@ -81,7 +95,8 @@ const estilo = StyleSheet.create({
   titulo: {
     color: '#fff',
     marginBottom: 50,
-    fontSize: 40
+    fontSize: 40,
+    fontFamily: 'Iceland-Regular'
   },
   btnCrear: {
     width: '40%',
