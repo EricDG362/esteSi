@@ -86,9 +86,6 @@ const Nuevo = () => {
    
     const FechaFormateada = date.toISOString(); // Formato poara graphql
 
-
-
-
     //mutation
     const [nuevoProcedimiento] = useMutation(NUEVO_PROCEDIMIENTO, {
         update(cache, { data: { nuevoProcedimiento } }) {

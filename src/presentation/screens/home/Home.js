@@ -1,5 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
 import {
   SafeAreaView,
@@ -12,10 +12,12 @@ import {
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import { jwtDecode } from 'jwt-decode';
+import { transform } from 'typescript';
 
 const Home = () => {
   const [nombre, setNombre] = useState(null);
 
+  //obtener nombre
   useEffect(() => {
     const obtenerNombre = async () => {
       const token = await AsyncStorage.getItem('token');
@@ -38,20 +40,70 @@ const Home = () => {
 
 
 
+
+
+
   const navigation = useNavigation();
 
   //animacion
   const animacion = useState(new Animated.Value(0.4))[0]; // Inicializa el valor animado
+  const [animacion1] = useState(new Animated.Value(0))
+  const [animacion2] = useState(new Animated.Value(1))
+
+
+
 
   useEffect(() => {
     Animated.timing(
       animacion, {
       toValue: 1, //q valla a 40
-      duration: 500, //q dure 1/2 segundo
+      duration: 1000, //q dure 1 segundo
       useNativeDriver: true,
     }
     ).start();
   }, [])
+
+  const animacionYpantalla = () => {
+
+    Animated.sequence([ //ejecuta las animaciones una detras de otra // 1 solo start
+
+      Animated.timing(animacion1, {
+        toValue: -80, //q valla a menos 30
+        duration: 500, //3 segundos
+        useNativeDriver: true,
+      }),
+
+      Animated.timing(animacion2, {
+        toValue: 50,
+        duration: 300, // Hacemos la animación de escala más rápida
+       // Aseguramos que la animación sea constante
+        useNativeDriver: true,
+      }),
+
+    ]).start(() => {
+      // Navegar después de completar la animación
+      navigation.navigate('Nuevo');
+    });
+  }
+
+    // Resetear la animación cuando se vuelve a Home
+    useFocusEffect( //importamos de navigation 
+      React.useCallback(() => {
+        // Resetear animaciones cuando se regrese a la pantalla de inicio
+        animacion1.setValue(0);
+        animacion2.setValue(1);
+      }, [])
+    );
+  
+
+  const estilaAnimacion = {
+    transform: [
+      { translateX: animacion1 },
+      {scale: animacion2}
+    ],
+  };
+
+
 
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
@@ -67,14 +119,21 @@ const Home = () => {
             <Text style={estilo.titulo}>Cargando...</Text>
           )}
 
-          <Pressable
-            style={estilo.btnCrear}
-            onPress={() => {
-              navigation.navigate('Nuevo');
-            }}
+
+          <Animated.View
+            style={estilaAnimacion}
           >
-            <Text style={estilo.textbtn}>CREAR ARCHIVO</Text>
-          </Pressable>
+            <Pressable
+              style={estilo.btnCrear}
+              onPress={() => animacionYpantalla()}
+            >
+
+              <Text style={estilo.textbtn}>CREAR ARCHIVO</Text>
+            </Pressable>
+          </Animated.View>
+
+
+
         </SafeAreaView>
       </LinearGradient>
     </TouchableWithoutFeedback>
