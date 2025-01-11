@@ -4,7 +4,8 @@ import {
   TouchableWithoutFeedback, Keyboard,
   KeyboardAvoidingView,
   Platform,
-  Alert
+  Alert,
+  Linking
 } from 'react-native'
 //apollo
 import { gql, useMutation } from '@apollo/client';
@@ -81,6 +82,17 @@ try {
 
   }
 
+  const handlepay = () => {
+    const url = 'https://mpago.la/1KwJsR7'; // URL de Mercado Pago
+
+    Linking.openURL(url) //q abra ese link mediante el modulo linking
+    
+    .catch((err) => { //de lo contrario muestre error
+      console.error('No se pudo abrir el enlace:', err);
+      Alert.alert('Error', 'No se pudo abrir el enlace de pago.');
+    });
+  };
+
 
   return (
 
@@ -140,6 +152,14 @@ try {
               >
                 <Text style={estilo.BotonText}>CREAR CUENTA</Text>
               </Pressable>
+
+              <Pressable //boton crear
+                style={estilo.boton}
+                onPress={() => handlepay()}
+              >
+                <Text style={estilo.BotonText}>Pagar mercado pago</Text>
+              </Pressable>
+
 
               <Pressable //boton cancelar
                 style={[estilo.boton, , estilo.btnCancelar]}

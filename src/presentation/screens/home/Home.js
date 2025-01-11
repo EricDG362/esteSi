@@ -76,7 +76,6 @@ const Home = () => {
       Animated.timing(animacion2, {
         toValue: 50,
         duration: 300, // Hacemos la animación de escala más rápida
-       // Aseguramos que la animación sea constante
         useNativeDriver: true,
       }),
 
@@ -101,6 +100,8 @@ const Home = () => {
       { translateX: animacion1 },
       {scale: animacion2}
     ],
+    width: '100%', // Asegura que el contenedor ocupe el ancho disponible. no restringue el boton y ahora si toma el 60%
+    alignItems: 'center'
   };
 
 
@@ -158,11 +159,13 @@ const estilo = StyleSheet.create({
     fontFamily: 'Iceland-Regular'
   },
   btnCrear: {
-    width: '40%',
+    width: '60%', // Ahora ocupa el 80% del ancho del contenedor padre
     backgroundColor: 'cyan',
     borderRadius: 20,
     marginBottom: 30,
     paddingVertical: 15,
+    justifyContent: 'center', // Centra el texto verticalmente
+    alignItems: 'center', // Centra el texto horizontalmente
   },
   btnBuscar: {
     width: '40%',

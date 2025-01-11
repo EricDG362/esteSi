@@ -14,6 +14,7 @@ import { gql, useQuery, useMutation } from '@apollo/client';
 import Archivo from './Archivo';
 import { StackActions, useFocusEffect, useNavigation } from '@react-navigation/native';
 import LinearGradient from 'react-native-linear-gradient';
+import { transform } from 'typescript';
 
 
 const OBTENER_PROCEDIMIENTOS = gql`
@@ -51,7 +52,7 @@ const Archivos = () => {
     // Estado para manejar el texto del filtro
     const [filtro, setFiltro] = useState('');
 
-   
+
 
     const { data, loading, error } = useQuery(OBTENER_PROCEDIMIENTOS);
 
@@ -101,62 +102,66 @@ const Archivos = () => {
             Alert.alert('Error', 'No se pudo eliminar el procedimiento. Inténtalo nuevamente.');
         }
     };
-
-
+   
+    
 
     const abrirNuevo = (id, procedi, sumarios, fechas) => {
-       
-        navi.navigate('Nuevo', { id: id || null, procedi: procedi || null, sumarios: sumarios || null, fechas:fechas||null });
-    };
+    
+            navi.navigate("Nuevo", { id, procedi, sumarios, fechas });
+    }
+
 
     // Filtrar los procedimientos basados en el texto del filtro
     const procedimientosFiltrados =
         data?.obtenerProcedimientos.filter((proc) =>
             proc.sumario.toLowerCase().includes(filtro.toLowerCase())
-        ) || [];
-
+        ) || []
 
 
 
     return (
         <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-                    <LinearGradient
-        colors={['#000000', '#013220']} // Negro a verde oscuro
-        locations={[0.005, 1]} // El negro ocupa el 30% y el verde oscuro empieza desde ahí hasta el final
-        style={styles.fondo}
-      >
-            <SafeAreaView   style={styles.container}>
-                <Animated.Text style={styles.titulo}>Procedimientos</Animated.Text>
+            <LinearGradient
+                colors={['#000000', '#013220']} // Negro a verde oscuro
+                locations={[0.005, 1]} // El negro ocupa el 30% y el verde oscuro empieza desde ahí hasta el final
+                style={styles.fondo}
+            >
+                <SafeAreaView style={styles.container}>
+                    <Text style={styles.titulo}>Procedimientos</Text>
 
-                {/* Input de filtro */}
-                <TextInput
-                    style={styles.input}
-                    placeholder="N° de SUMARIO"
-                    keyboardType="default"
-                    value={filtro}
-                    onChangeText={(text) => setFiltro(text)}
-                />
+                    {/* Input de filtro */}
+                    <TextInput
+                        style={styles.input}
+                        placeholder="N° de SUMARIO"
+                        keyboardType="default"
+                        value={filtro}
+                        onChangeText={(text) => setFiltro(text)}
+                    />
 
-                {/* FlatList muestra procedimientos filtrados */}
-                <FlatList
-                    data={procedimientosFiltrados}
-                    renderItem={({ item }) => (
-                        <Archivo
-                            item={item}
-                            onLongPress={mensajeEliminarProce}
-                            onPress={abrirNuevo}
-                        
-                        />
-                    )}
-                    keyExtractor={(item) => item.id}
-                    ListEmptyComponent={
-                        <Text style={styles.titulo}>No hay procedimientos disponibles</Text>
-                    }
-                />
+                    {/* FlatList muestra procedimientos filtrados */}
+                    <FlatList
+                        data={procedimientosFiltrados}
+                        renderItem={({ item }) => (
 
-       
+                            //estas son las
+                            <Archivo
+                                item={item}
+                                onLongPress={mensajeEliminarProce}
+                                onPress={abrirNuevo}
+                                
 
-            </SafeAreaView>
+                            />
+
+                        )}
+                        keyExtractor={(item) => item.id.toString()}
+                        ListEmptyComponent={
+                            <Text style={styles.titulo}>No hay procedimientos disponibles</Text>
+                        }
+                    />
+
+
+
+                </SafeAreaView>
             </LinearGradient>
         </TouchableWithoutFeedback>
     );
@@ -176,7 +181,7 @@ const styles = StyleSheet.create({
         fontWeight: '900',
         marginTop: 30,
         color: '#fff',
-        fontSize:30
+        fontSize: 30
     },
     input: {
         backgroundColor: '#FFF',
@@ -186,7 +191,7 @@ const styles = StyleSheet.create({
         paddingVertical: 15,
         paddingHorizontal: 15,
         borderRadius: 15,
-        textAlign:'center'
+        textAlign: 'center'
     },
     boton: {
         backgroundColor: 'cyan',

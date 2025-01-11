@@ -1,6 +1,6 @@
 import { format } from 'date-fns';
 import React from 'react'
-import { Pressable, StyleSheet, Text, View } from 'react-native'
+import { Pressable, StyleSheet, Text, View, Animated } from 'react-native'
 
 
 type ArchivoProps = {
@@ -11,15 +11,14 @@ type ArchivoProps = {
     fecha: Date;
   };
   onLongPress: (id: string) => void; // Agregamos la función como prop
-  onPress: (id: string, proce: string, sumario: string, fecha: Date) => void
+  onPress: (id: string, proce: string, sumario: string, fecha: Date) => void;
+
 };
 
 
 const Archivo = ({ item, onLongPress, onPress }: ArchivoProps) => {
 
-  const { id } = item
-
-  const { sumario, proce, fecha } = item
+  const { id, sumario, proce, fecha } = item;
 
   const formatoFecha = (fecha: string | Date): string => {
     const nuevaFechaa = new Date(fecha);
@@ -55,9 +54,7 @@ const Archivo = ({ item, onLongPress, onPress }: ArchivoProps) => {
       onPress={() => { onPress(id, proce, sumario, fecha) }}
     >
 
-      <View style={e.caja}>
-
-
+      <View style={[e.caja]}>
 
 
         <View>
@@ -96,14 +93,14 @@ const e = StyleSheet.create({
     borderBottomColor: '#FF0000',
     borderWidth: 3,
     //sombra para la caja
-    shadowColor:'#000',
-    shadowOffset:{
-      width:0,
-      height:2,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
     },
-    shadowOpacity:0.25,
+    shadowOpacity: 0.25,
     shadowRadius: 3.84,
-    elevation:5
+    elevation: 5
 
 
 
