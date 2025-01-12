@@ -12,7 +12,7 @@ import {
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import { jwtDecode } from 'jwt-decode';
-import { transform } from 'typescript';
+
 
 const Home = () => {
   const [nombre, setNombre] = useState(null);
@@ -49,6 +49,10 @@ const Home = () => {
   const animacion = useState(new Animated.Value(0.4))[0]; // Inicializa el valor animado
   const [animacion1] = useState(new Animated.Value(0))
   const [animacion2] = useState(new Animated.Value(1))
+  const animacionColor = animacion1.interpolate({
+    inputRange: [-80, 0],
+    outputRange: ['#ff0000', 'cyan'], // Cambia de celeste a verde
+  });
 
 
 
@@ -85,23 +89,34 @@ const Home = () => {
     });
   }
 
-    // Resetear la animación cuando se vuelve a Home
-    useFocusEffect( //importamos de navigation 
-      React.useCallback(() => {
-        // Resetear animaciones cuando se regrese a la pantalla de inicio
-        animacion1.setValue(0);
-        animacion2.setValue(1);
-      }, [])
-    );
-  
+  // Resetear la animación cuando se vuelve a Home
+  useFocusEffect( //importamos de navigation 
+    React.useCallback(() => {
+      // Resetear animaciones cuando se regrese a la pantalla de inicio
+      animacion1.setValue(0);
+      animacion2.setValue(1);
+      Animated.timing(animacion1, {
+        toValue: 0, // Resetear animacion1 a su valor inicial
+        duration: 0, // Sin animación
+        useNativeDriver: true,
+      }).start();
+
+
+    }, [])
+  );
+
 
   const estilaAnimacion = {
     transform: [
       { translateX: animacion1 },
-      {scale: animacion2}
+      { scale: animacion2 }
     ],
-    width: '100%', // Asegura que el contenedor ocupe el ancho disponible. no restringue el boton y ahora si toma el 60%
-    alignItems: 'center'
+    width: '80%', // Asegura que el contenedor ocupe el ancho disponible. no restringue el boton y ahora si toma el 60%
+    justifyContent:'center',
+    alignItems: 'center',
+    borderRadius: 20,
+    backgroundColor: animacionColor,
+
   };
 
 
@@ -125,7 +140,7 @@ const Home = () => {
             style={estilaAnimacion}
           >
             <Pressable
-              style={estilo.btnCrear}
+              style={[estilo.btnCrear]}
               onPress={() => animacionYpantalla()}
             >
 
@@ -159,22 +174,17 @@ const estilo = StyleSheet.create({
     fontFamily: 'Iceland-Regular'
   },
   btnCrear: {
-    width: '60%', // Ahora ocupa el 80% del ancho del contenedor padre
-    backgroundColor: 'cyan',
+    width: '100%', // Ahora ocupa el 80% del ancho del contenedor padre
     borderRadius: 20,
-    marginBottom: 30,
+   
     paddingVertical: 15,
     justifyContent: 'center', // Centra el texto verticalmente
     alignItems: 'center', // Centra el texto horizontalmente
   },
-  btnBuscar: {
-    width: '40%',
-    backgroundColor: 'green',
-    borderRadius: 20,
-    paddingVertical: 15,
-  },
+
   textbtn: {
     textAlign: 'center',
+   
   },
 });
 

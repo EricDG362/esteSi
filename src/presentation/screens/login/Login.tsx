@@ -16,6 +16,8 @@ const AUTENTICAR_USUARIO = gql`
 mutation autenticarUsuario($input: AutenticarInput) {
   autenticarUsuario(input: $input) {
     token
+    estado
+
   }
  }
 `;
@@ -58,7 +60,15 @@ const [autenticarUsuario] =useMutation(AUTENTICAR_USUARIO)
       })
 
      
-      const {token} = data.autenticarUsuario //extraemos el token
+      const {token, estado} = data.autenticarUsuario //extraemos el token y el estado
+
+      if (!estado) {
+        Alert.alert(
+          'Acceso Denegado',
+          'Tu cuenta aún no ha sido activada. Por favor, contacta con soporte.',
+        );
+        return;
+      }
 
       const nombre = data.autenticarUsuario.nombre
      

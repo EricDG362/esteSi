@@ -5,11 +5,15 @@ import {
   KeyboardAvoidingView,
   Platform,
   Alert,
-  Linking
+  Linking,
+
 } from 'react-native'
 //apollo
 import { gql, useMutation } from '@apollo/client';
-import { StackActions, useNavigation } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
+import emailjs from '@emailjs/react-native'
+
+
 
 
 interface FormularioModalProps {
@@ -23,75 +27,119 @@ mutation crearUsuario ($input:UsuarioInput){
 }`;
 
 //aca se loo asignamos
-const FormularioModal =  ({ modalVisible, setModalVisible }: FormularioModalProps) => {
+const FormularioModal = ({ modalVisible, setModalVisible }: FormularioModalProps) => {
 
   const [nombre, setNombre] = useState('')
   const [apellido, setApellido] = useState('')
   const [email, setEmail] = useState('')
+  const [telefono, setTelefono] = useState('')
   const [password, setPassword] = useState('')
 
-const navi = useNavigation()
+
+  const navi = useNavigation()
 
   //mutation apolo
-  const [crearUsuario] = useMutation(NUEVA_CUENTA) 
-  
+  const [crearUsuario] = useMutation(NUEVA_CUENTA)
+
   //envia el formulario
   const handleSubmit = async () => {
     //validar campos
-    if (nombre === "" || apellido === "" || email === "" || password === "") {
+    if (nombre === "" || apellido === "" || email === "" || password === ""||telefono==="") {
       Alert.alert(
         'Error!',
-        'Todos los campos son obligatorios.',  
+        'Todos los campos son obligatorios.',
       );
       return;
     }
     //password 6 caracteres
-    if(password.length <6){
+    if (password.length < 6) {
       Alert.alert(
         'Error!',
-        'La Contraseña debe contener al menos 6 caracteres.',  
+        'La Contraseña debe contener al menos 6 caracteres.',
       );
       return;
     }
 
     //guardar usuario
-try {
-  const {data} = await crearUsuario({
-    variables:{
-      input:{
-        nombre,
-        apellido,
-        email,
-        password
-      }
+    try {
+      const { data } = await crearUsuario({
+        variables: {
+          input: {
+            nombre,
+            apellido,
+            telefono,
+            email,
+            password
+          }
+        }
+      })
+
+      Alert.alert(
+        'Usuario Creado!',
+        'Su cuenta fue creada con exito!!.',
+      );
+
+      setModalVisible(!modalVisible)//cambie el estado a lo opuesto a lo q esta
+
+
+    } catch (error) {
+      console.log(error)
     }
-  })
-
-  Alert.alert(
-    'Usuario Creado!',
-    'Su cuenta fue creada con exito!!.',  
-  );
-
-  setModalVisible(!modalVisible)//cambie el estado a lo opuesto a lo q esta
-
-  
-} catch (error) {
-  console.log(error)
-}
 
 
   }
 
-  const handlepay = () => {
-    const url = 'https://mpago.la/1KwJsR7'; // URL de Mercado Pago
 
-    Linking.openURL(url) //q abra ese link mediante el modulo linking
-    
-    .catch((err) => { //de lo contrario muestre error
-      console.error('No se pudo abrir el enlace:', err);
-      Alert.alert('Error', 'No se pudo abrir el enlace de pago.');
-    });
+
+  const EnviodeEmail = async () => {
+    if (!nombre || !apellido || !email || !password || !telefono) {
+      Alert.alert('Error', 'Todos los campos son obligatorios.');
+      return;
+    }
+
+    const templateParams = {
+      nombre: 'John',
+      apellido: 'Doe',
+      email: 'johndoe@example.com',
+      mensaje: 'Hello, I need help!',
+    };
+
+    try {
+      const response = await emailjs.send(
+        'service_bz1fuig', // tu SERVICE_ID
+        'template_xbvcqrm', //  tu TEMPLATE_ID
+        templateParams,
+        {
+          publicKey: 'wAPcD_GO_Ty28gdZj', // tu PUBLIC_KEY
+        }
+      );
+      console.log('Correo enviado con éxito:', response.status, response.text);
+    } catch (err) {
+      console.error('Error al enviar el correo:', err);
+    }
+
+
   };
+
+
+  const EnviodeEmail2 = (to:string, subject:string, body:string)=>{
+
+    Linking.openURL(`mailto:${to}?subject=${subject}&body=${body}`)
+
+  }
+
+
+  // //luego es enviado a mercado pago
+  // const url = 'https://mpago.la/1KwJsR7'; // URL de Mercado Pago
+
+  // Linking.openURL(url) //q abra ese link mediante el modulo linking
+
+  //   .catch((err) => { //de lo contrario muestre error
+  //     console.error('No se pudo abrir el enlace:', err);
+  //     Alert.alert('Error', 'No se pudo abrir el enlace de pago.');
+  //   });
+
+
 
 
   return (
@@ -129,12 +177,21 @@ try {
             </View>
 
             <View style={estilo.campo}>
+              <Text style={estilo.label} >TELEFONO</Text>
+              <TextInput
+                style={estilo.input}
+                value={telefono}
+                onChangeText={text => setTelefono(text)}
+              />
+            </View>
+
+            <View style={estilo.campo}>
               <Text style={estilo.label} >EMAIL</Text>
               <TextInput
                 style={estilo.input}
                 onChangeText={text => setEmail(text.toLowerCase())}
                 value={email}
-                
+
               />
             </View>
 
@@ -155,9 +212,18 @@ try {
 
               <Pressable //boton crear
                 style={estilo.boton}
-                onPress={() => handlepay()}
+                onPress=
+                {() => EnviodeEmail()}
               >
-                <Text style={estilo.BotonText}>Pagar mercado pago</Text>
+                <Text style={estilo.BotonText}>Enviar EmailJS</Text>
+              </Pressable>
+
+              <Pressable //boton crear
+                style={estilo.boton}
+                onPress=      
+              {() => EnviodeEmail2('makarov362edg@gmail.com', `Soy ${nombre} ${apellido}`,` quisiera su svc con este Email: ${email} y esta contraseña ${password}`)}
+              >
+                <Text style={estilo.BotonText}>Enviar Email con el telefono</Text>
               </Pressable>
 
 
