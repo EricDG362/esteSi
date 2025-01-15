@@ -5,6 +5,7 @@ import Archivos from '../screens/archivos/Archivos';
 import Archivo from '../screens/archivos/Archivo';
 import Nuevo from '../screens/archivos/Nuevo';
 import Login from '../screens/login/Login';
+import Administrador from '../screens/admin/Administrador';
 
 
 
@@ -31,6 +32,15 @@ const NavegacionStack = () => {
         name="Login" 
         component={Login} 
         options={{ title: 'login' ,
+          headerShown:false
+        }
+      } 
+      /> 
+
+<Stack.Screen 
+        name="Administrador" 
+        component={Administrador} 
+        options={{ title: 'Administrador' ,
           headerShown:false
         }
       } 
