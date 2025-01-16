@@ -7,8 +7,34 @@ import {
 import LinearGradient from 'react-native-linear-gradient';
 import { jwtDecode } from 'jwt-decode';
 import { FlatList } from 'react-native-gesture-handler';
+import { gql, useQuery } from '@apollo/client';
+import Usuario from './Usuario';
+
+
+
+const OBTENER_USUARIOS = gql`
+  query obtenerUsuarios {
+    obtenerUsuarios {
+          id
+         nombre
+        apellido
+         telefono
+         email
+          estado
+    }
+  }
+`;
+
+
+
+
+
+
+
 
 const Administrador = () => {
+
+
     const [filtro, setFiltro] = useState('');
     const [nombre, setNombre] = useState(null);
 
@@ -27,6 +53,29 @@ const Administrador = () => {
 
         obtenerNombre();
     }, []);
+
+
+    const { data, loading, error } = useQuery(OBTENER_USUARIOS);
+    console.log("desde data em administrador: " , data)
+
+    if (loading) return <Text style={styles.titulo}>Cargando...</Text>;
+
+    if (error) {
+        console.log('Error al cargar datos:', error);
+        return <Text style={styles.titulo}>Error al cargar datos</Text>;
+    }
+
+
+    // Filtrar los usuarios basados en el texto del filtro
+    const usuariosFiltrados =
+        data?.obtenerUsuarios.filter((usu) =>
+            usu.nombre.toLowerCase().includes(filtro.toLowerCase())
+        ) || []
+
+        const ChangeState = () =>{
+            
+        }
+
 
     return (
         <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
@@ -53,7 +102,26 @@ const Administrador = () => {
                         onChangeText={(text) => setFiltro(text)}
                     />
 
-                    <FlatList />
+                    <FlatList
+                        data={usuariosFiltrados}
+                        renderItem={({ item }) => (
+
+                            //estas son las
+                            <Usuario
+                                item={item}
+
+                                onPress={ChangeState}
+                            />
+                        )}
+                        keyExtractor={(item) => item.id.toString()}
+                        //si no hay nada
+                        ListEmptyComponent={
+                            <Text style={styles.titulo}>No hay Usuarios disponibles</Text>
+                        }
+                    />
+
+
+
                 </SafeAreaView>
             </LinearGradient>
         </TouchableWithoutFeedback>

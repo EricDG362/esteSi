@@ -125,23 +125,15 @@ const [autenticarUsuario] =useMutation(AUTENTICAR_USUARIO)
             value={email}
           />
 
-          <View style={estilo.inputContainer}>
+         
             <TextInput
-              style={[estilo.input, estilo.inputPassword]}
+              style={[estilo.input]}
               placeholder="PASSWORD"
               placeholderTextColor={'#000'}
               secureTextEntry={secureTextEntry} // Cambia dinámicamente según el estado
               onChangeText={text => setPass(text)}
             />
-            <Pressable
-              style={estilo.toggleButton}
-              onPress={() => setSecureTextEntry(!secureTextEntry)} // Alterna entre visible y oculto
-            >
-              <Text style={estilo.toggleButtonText}>
-                {secureTextEntry ? '👁️' : '🙈'}
-              </Text>
-            </Pressable>
-          </View>
+    
 
           <Pressable
             style={estilo.boton}
@@ -154,7 +146,7 @@ const [autenticarUsuario] =useMutation(AUTENTICAR_USUARIO)
           </Pressable>
 
           <View style={estilo.padre}>
-            <Text style={estilo.text}>Si no posees una cuenta. </Text>
+            <Text style={[estilo.textsino, estilo.text]}>Si no posees una cuenta. </Text>
             <Pressable onPress={() => setModalVisible(true)}>
               <Text style={[estilo.text, estilo.textcreate]}>CREAR UNA CUENTA</Text>
             </Pressable>
@@ -183,10 +175,11 @@ const estilo = StyleSheet.create({
     backgroundColor: 'rgba(255, 255, 255, 0.5)',
     borderRadius: 15,
     width: '80%',
-    height: 35,
-    paddingLeft: 10,
-    marginBottom: 20,
+    height: 60,
+    padding: 20, // Aplica padding en todas las direcciones
+    marginBottom: 15,
     textAlign: 'center',
+    textAlignVertical: 'center', // Alinea verticalmente el texto
     color: '#fff',
     fontWeight: '700',
   },
@@ -198,9 +191,7 @@ const estilo = StyleSheet.create({
     width: '80%',
     marginBottom: 20,
   },
-  inputPassword: {
-    paddingRight: 40, // Espacio para el botón
-  },
+ 
   toggleButton: {
     position: 'absolute',
     right: 10, // Posiciona el botón dentro del input
@@ -223,15 +214,20 @@ const estilo = StyleSheet.create({
   botontext: {
     textAlign: 'center',
     fontWeight: '900',
+    fontSize:20
   },
   padre: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
   },
+  textsino: {
+    fontSize: Platform.OS === 'ios' ? 16 : 20, // Tamaño condicional para textsino
+  },
   textcreate: {
+    fontSize: Platform.OS === 'ios' ? 18 : 20, // Tamaño condicional para textcreate
+    fontWeight: 'bold',
     color: 'cyan',
-    fontWeight: '700',
   },
 });
 
