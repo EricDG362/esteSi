@@ -1,14 +1,15 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import React, { useState, useEffect,useMemo } from 'react';
+
+import React, { useState } from 'react';
 import {
     Text, StyleSheet, TouchableWithoutFeedback,
     SafeAreaView, Keyboard, TextInput
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
-import { jwtDecode } from 'jwt-decode';
+
 import { FlatList } from 'react-native-gesture-handler';
 import { gql, useQuery, useMutation } from '@apollo/client';
 import Usuario from './Usuario';
+
 
 
 
@@ -47,27 +48,12 @@ mutation  actualizarEstado($id:ID!, $input:UsuarioInput, $estado: Boolean){
 
 
 
-const Administrador = (usuario) => {
+const Administrador = () => {
 
 
     const [filtro, setFiltro] = useState('');
-    const [nombre, setNombre] = useState(null);
+ 
 
-    useEffect(() => {
-        const obtenerNombre = async () => {
-            const token = await AsyncStorage.getItem('token');
-            if (token) {
-                try {
-                    const decoded = jwtDecode(token);
-                    setNombre(decoded.nombre);
-                } catch (error) {
-                    console.error('Error al decodificar el token:', error);
-                }
-            }
-        };
-
-        obtenerNombre();
-    }, []);
 
 
     //apollo
@@ -85,16 +71,15 @@ const Administrador = (usuario) => {
 
 
     // Filtrar los usuarios basados en el texto del filtro
-    const usuariosFiltrados = useMemo(() => {
-        return data?.obtenerUsuarios.filter((usu) =>
-            usu.nombre.toLowerCase().includes(filtro.toLowerCase())
-        ) || [];
-    }, [data, filtro]);
+    const usuariosFiltrados = data?.obtenerUsuarios.filter((usu) =>
+        usu.nombre.toLowerCase().includes(filtro.toLowerCase())
+    ) || [];
+    
 
 
     //cambia el estado
     const ChangeState = async ({item}) => {
-        console.log('el item del change:',item)
+       
         const {id, nombre, apellido, telefono, email, estado} = item
 
         if (!id || !nombre || !apellido || !telefono || !email) {
@@ -118,7 +103,7 @@ const Administrador = (usuario) => {
                        estado: !estado
                 }
             });
-            console.log ('desde change a la data:' ,data)
+           
         } catch (error) {
             console.log('error al actualizar estado:', error)
         }
@@ -135,11 +120,9 @@ const Administrador = (usuario) => {
                 style={styles.fondo}
             >
                 <SafeAreaView style={styles.container}>
-                    {nombre ? (
-                        <Text style={styles.titulo}>Bienvenido administrador: {nombre}!!</Text>
-                    ) : (
-                        <Text style={styles.titulo}>Cargando...</Text>
-                    )}
+                    
+                        <Text style={styles.titulo}>Bienvenido administrador!!</Text>
+                   
 
                     <Text style={styles.titulo}>Lista de Usuarios</Text>
 
@@ -167,6 +150,7 @@ const Administrador = (usuario) => {
                         ListEmptyComponent={
                             <Text style={styles.titulo}>No hay Usuarios disponibles</Text>
                         }
+                        style={{ width: '80%' }} // Ajusta el ancho aquí
                     />
 
 
