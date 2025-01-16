@@ -1,5 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect,useMemo } from 'react';
 import {
     Text, StyleSheet, TouchableWithoutFeedback,
     SafeAreaView, Keyboard, TextInput
@@ -7,7 +7,7 @@ import {
 import LinearGradient from 'react-native-linear-gradient';
 import { jwtDecode } from 'jwt-decode';
 import { FlatList } from 'react-native-gesture-handler';
-import { gql, useQuery } from '@apollo/client';
+import { gql, useQuery, useMutation } from '@apollo/client';
 import Usuario from './Usuario';
 
 
@@ -26,13 +26,28 @@ const OBTENER_USUARIOS = gql`
 `;
 
 
+const ACTUALIZAR_ESTADO = gql`
+mutation  actualizarEstado($id:ID!, $input:UsuarioInput, $estado: Boolean){
+        actualizarEstado(id:$id, input: $input, estado: $estado){
+        
+     id
+  nombre
+  apellido
+  telefono
+  email
+  estado
+        
+        }
+}
+`;
 
 
 
 
 
 
-const Administrador = () => {
+
+const Administrador = (usuario) => {
 
 
     const [filtro, setFiltro] = useState('');
@@ -55,8 +70,11 @@ const Administrador = () => {
     }, []);
 
 
+    //apollo
+    const [actualizarEstado] = useMutation(ACTUALIZAR_ESTADO)
     const { data, loading, error } = useQuery(OBTENER_USUARIOS);
-    console.log("desde data em administrador: " , data)
+
+    // console.log("desde data em administrador: " , data)
 
     if (loading) return <Text style={styles.titulo}>Cargando...</Text>;
 
@@ -67,14 +85,45 @@ const Administrador = () => {
 
 
     // Filtrar los usuarios basados en el texto del filtro
-    const usuariosFiltrados =
-        data?.obtenerUsuarios.filter((usu) =>
+    const usuariosFiltrados = useMemo(() => {
+        return data?.obtenerUsuarios.filter((usu) =>
             usu.nombre.toLowerCase().includes(filtro.toLowerCase())
-        ) || []
+        ) || [];
+    }, [data, filtro]);
 
-        const ChangeState = () =>{
-            
+
+    //cambia el estado
+    const ChangeState = async ({item}) => {
+        console.log('el item del change:',item)
+        const {id, nombre, apellido, telefono, email, estado} = item
+
+        if (!id || !nombre || !apellido || !telefono || !email) {
+            console.error('Datos faltantes en ChangeState:', { id, nombre, apellido, telefono, email, estado });
+            return;
         }
+
+        try {
+       
+
+            const { data } = await actualizarEstado({
+                variables: {
+                    id,
+                    input: {
+                        nombre,
+                        apellido,
+                        telefono,
+                        email,
+                    
+                    },
+                       estado: !estado
+                }
+            });
+            console.log ('desde change a la data:' ,data)
+        } catch (error) {
+            console.log('error al actualizar estado:', error)
+        }
+
+    }
 
 
     return (

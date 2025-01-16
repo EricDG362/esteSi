@@ -2,9 +2,9 @@ import React from 'react'
 import { Text, StyleSheet, Pressable, View } from 'react-native'
 
 
-const Usuario = ({ item }) => {
+const Usuario = ({ item, onPress }) => {
 
-    console.log("valores del item en usuario.js:", item)
+    
 
     const { id, nombre, apellido, estado, telefono } = item
 
@@ -12,14 +12,14 @@ const Usuario = ({ item }) => {
 
     return (
         <Pressable
-
-            onPress={() => { onPress(id, estado) }}
+    
+        onPress={() => { onPress ({item}) }}
         >
 
             <View style={[e.caja]}>
 
 
-                <View>
+               
                     <Text style={e.label}>Nombre:
                         <Text style={e.textoSumario}> {nombre}</Text>
                     </Text>
@@ -32,19 +32,16 @@ const Usuario = ({ item }) => {
                         <Text style={e.textoSumario}> {telefono}</Text>
                     </Text>
 
-                    <View style={[e.cajaEstado, {backgroundColor: estado ? "#037F4A" : "#FF0000" }]}>
-                    <Text style={e.textofecha}>
-                        {estado ? "ACTIVO" : "INHABILITADO"}
-                    </Text>
+
+                    <View style={[e.cajaEstado, { backgroundColor: estado ? "#037F4A" : "#FF0000" }]}>
+                        <Text style={e.textState}>
+                            {estado ? "ACTIVO" : "INHABILITADO"}
+                        </Text>
                     </View>
 
-                </View>
+             
 
-                <Pressable
-                    onLongPress={() => { onLongPress(id) }} //lo envoplvemos en una funcion
-                    style={e.botonEliminar}>
-                    <Text style={e.textEliminar}>X</Text>
-                </Pressable>
+
 
 
             </View>
@@ -54,9 +51,10 @@ const Usuario = ({ item }) => {
 
 const e = StyleSheet.create({
 
+ 
 
     caja: {
-        flexDirection: 'row',
+        flexDirection: 'column',
         justifyContent: 'space-between',
         backgroundColor: '#fff',
         marginVertical: 5,
@@ -64,6 +62,7 @@ const e = StyleSheet.create({
         padding: 20,
         borderBottomColor: '#FF0000',
         borderWidth: 3,
+        width:'100%',
         //sombra para la caja
         shadowColor: '#000',
         shadowOffset: {
@@ -81,7 +80,7 @@ const e = StyleSheet.create({
         color: '#374151',
         textTransform: 'uppercase',
         fontWeight: 700,
-        marginBottom: 10
+        marginBottom: 5
 
 
     },
@@ -93,31 +92,19 @@ const e = StyleSheet.create({
         marginBottom: 10
 
     },
-    cajaEstado:{
-        backgroundColor: '#4B4B4B'
+    cajaEstado: {
+        backgroundColor: '#4B4B4B',
+        alignItems: 'center',
+        marginTop:20,
+        width: '100%',
     },
 
-    textofecha: {
-
-        color: "#0000",
+    textState: {
+        fontSize: 20,
+        color: "#fff",
+        fontWeight:600,
 
     },
-
-
-    botonEliminar: {
-        backgroundColor: '#CC0000',
-        alignItems: 'flex-end',
-        padding: 5,
-        marginBottom: 55,
-        borderRadius: 5,
-        alignContent: 'center'
-    },
-    textEliminar: {
-        color: '#ffff',
-        fontWeight: '700'
-    },
-
-
 
 })
 
