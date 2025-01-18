@@ -2,13 +2,16 @@
 import React, { useState } from 'react';
 import {
     Text, StyleSheet, TouchableWithoutFeedback,
-    SafeAreaView, Keyboard, TextInput
+    SafeAreaView, Keyboard, TextInput,
+    Pressable,
+    View
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 
 import { FlatList } from 'react-native-gesture-handler';
 import { gql, useQuery, useMutation } from '@apollo/client';
 import Usuario from './Usuario';
+import { useNavigation } from '@react-navigation/native';
 
 
 
@@ -52,8 +55,8 @@ const Administrador = () => {
 
 
     const [filtro, setFiltro] = useState('');
- 
 
+const navi =useNavigation()
 
 
     //apollo
@@ -74,13 +77,13 @@ const Administrador = () => {
     const usuariosFiltrados = data?.obtenerUsuarios.filter((usu) =>
         usu.nombre.toLowerCase().includes(filtro.toLowerCase())
     ) || [];
-    
+
 
 
     //cambia el estado
-    const ChangeState = async ({item}) => {
-       
-        const {id, nombre, apellido, telefono, email, estado} = item
+    const ChangeState = async ({ item }) => {
+
+        const { id, nombre, apellido, telefono, email, estado } = item
 
         if (!id || !nombre || !apellido || !telefono || !email) {
             console.error('Datos faltantes en ChangeState:', { id, nombre, apellido, telefono, email, estado });
@@ -88,7 +91,7 @@ const Administrador = () => {
         }
 
         try {
-       
+
 
             const { data } = await actualizarEstado({
                 variables: {
@@ -98,12 +101,12 @@ const Administrador = () => {
                         apellido,
                         telefono,
                         email,
-                    
+
                     },
-                       estado: !estado
+                    estado: !estado
                 }
             });
-           
+
         } catch (error) {
             console.log('error al actualizar estado:', error)
         }
@@ -120,12 +123,15 @@ const Administrador = () => {
                 style={styles.fondo}
             >
                 <SafeAreaView style={styles.container}>
-                    
-                        <Text style={styles.titulo}>Bienvenido administrador!!</Text>
-                   
 
-                    <Text style={styles.titulo}>Lista de Usuarios</Text>
+                    <Text style={styles.titulo}>Bienvenido administrador!!</Text>
 
+
+
+
+                    <Text style={styles.subtitulo}>Lista de Usuarios</Text>
+
+                    <View style={{flexDirection:'row', justifyContent:'space-between', alignItems:'center'}}>
                     <TextInput
                         style={styles.input}
                         placeholder="Nombre de Usuario"
@@ -133,6 +139,20 @@ const Administrador = () => {
                         value={filtro}
                         onChangeText={(text) => setFiltro(text)}
                     />
+
+                    <Pressable //boton crear
+                        style={styles.boton}
+                        onPress={() => navi.navigate('CrearUsuario')}
+                    >
+                        <Text style={styles.BotonText}>+</Text>
+                    </Pressable>
+                    </View>
+
+
+
+
+
+
 
                     <FlatList
                         data={usuariosFiltrados}
@@ -171,19 +191,42 @@ const styles = StyleSheet.create({
     },
     titulo: {
         color: '#fff',
-        marginTop: 40,
+        marginTop: 30,
         fontSize: 30,
         fontFamily: 'Iceland-Regular',
+    },
+    subtitulo: {
+        color: '#fff',
+
+        fontSize: 30,
+        fontFamily: 'Iceland-Regular',
+
     },
     input: {
         backgroundColor: '#FFF',
         width: '60%',
-        marginTop: 30,
-        marginBottom: 40,
+        marginTop: 20,
         paddingVertical: 15,
         paddingHorizontal: 15,
-        borderRadius: 15,
+        marginBottom: 20,
         textAlign: 'center',
+        marginRight:10,
+        fontSize:15
+    },
+    boton: {
+        backgroundColor: 'cyan',
+        marginVertical: 20,
+        paddingHorizontal: 10,
+        width: '20%',
+        alignItems: 'center',
+        borderRadius:'30%',
+
+    },
+    BotonText: {
+        fontWeight: 800,
+        textAlign: 'center',
+        fontSize: 30,
+
     },
 });
 

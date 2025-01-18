@@ -68,22 +68,22 @@ const Nuevo = () => {
     const [date, setDate] = useState(new Date() || fechasFromRoute)
     const [open, setOpen] = useState(false)
 
-   
-     const nuevafecha = fechasFromRoute
+
+    const nuevafecha = fechasFromRoute
 
 
-     // Formato deseado
-     let fechaParaM = '';
-     if (nuevafecha !== undefined && nuevafecha !== null) {
+    // Formato deseado
+    let fechaParaM = '';
+    if (nuevafecha !== undefined && nuevafecha !== null) {
         fechaParaM = format(new Date(nuevafecha), 'dd/MM/yyyy');
     }
-        
-    
+
+
     const [sumario, setSumario] = useState(sumarioFromRoute || '');
     const [proce, setProce] = useState(proceFromRoute || '');
     const [id, setId] = useState(idFromRoute || null);
 
-   
+
     const FechaFormateada = date.toISOString(); // Formato poara graphql
 
     //mutation
@@ -105,24 +105,24 @@ const Nuevo = () => {
     });
     const [actualizarProcedimiento] = useMutation(ACTUALIZAR_PROCEDIMIENTO, {
         update(cache, { data: { actualizarProcedimiento } }) {
-            console.log('Procedimiento actualizado:', actualizarProcedimiento);
-
             const data = cache.readQuery({
                 query: OBTENER_PROCEDIMIENTOS,
             });
 
-            console.log('Datos en el caché antes de la actualización:', data);
-
             if (data?.obtenerProcedimientos) {
+                const procedimientosActualizados = data.obtenerProcedimientos.map((item) =>
+                    item.id === actualizarProcedimiento.id ? actualizarProcedimiento : item
+                );
+
                 cache.writeQuery({
                     query: OBTENER_PROCEDIMIENTOS,
                     data: {
-                        obtenerProcedimientos: [...data.obtenerProcedimientos, actualizarProcedimiento],
+                        obtenerProcedimientos: procedimientosActualizados,
                     },
-
                 });
             }
         },
+
     })
 
 
@@ -144,8 +144,8 @@ const Nuevo = () => {
             return;
         }
 
-         //validacion fecha
-         if ([date].includes('')) {
+        //validacion fecha
+        if ([date].includes('')) {
             Alert.alert(
                 'Error',
                 'Seleccione una Fecha)',
@@ -320,7 +320,7 @@ const Nuevo = () => {
                         style={[styles.pickerBOTON, { marginTop: 80 }, { paddingHorizontal: 20 }, { paddingVertical: 20 }, { borderColor: "#32CD32" }]}
                         onPress={() => setOpen(true)}
                     >
-                        <Text style={[styles.BotonText, { color: "#ffff" },{fontWeight:'900'}]}>SELECCIONE FECHA</Text>
+                        <Text style={[styles.BotonText, { color: "#ffff" }, { fontWeight: '900' }]}>SELECCIONE FECHA</Text>
                     </TouchableOpacity>
 
                     <TouchableOpacity

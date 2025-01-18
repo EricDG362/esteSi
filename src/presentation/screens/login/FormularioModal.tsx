@@ -292,7 +292,7 @@ const estilo = StyleSheet.create({
 
   },
   btnCancelar: {
-    marginTop: 80,
+    marginTop: Platform.OS === 'android' ? 50 : 40,
     backgroundColor: 'red'
   },
 })
