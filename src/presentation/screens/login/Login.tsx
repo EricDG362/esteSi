@@ -182,6 +182,7 @@ const estilo = StyleSheet.create({
     textAlignVertical: 'center', // Alinea verticalmente el texto
     color: '#fff',
     fontWeight: '700',
+    fontSize:20
   },
   inputPrime: {
     marginTop: 450,

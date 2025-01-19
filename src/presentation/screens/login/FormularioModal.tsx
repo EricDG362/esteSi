@@ -8,8 +8,7 @@ import {
   Linking,
 
 } from 'react-native'
-//apollo
-import { gql, useMutation } from '@apollo/client';
+
 import { useNavigation } from '@react-navigation/native';
 import emailjs from '@emailjs/react-native'
 
@@ -21,10 +20,7 @@ interface FormularioModalProps {
   setModalVisible: (visible: boolean) => void; // Es una función que actualiza el estado
 }
 
-const NUEVA_CUENTA = gql`
-mutation crearUsuario ($input:UsuarioInput){
-    crearUsuario(input:$input)
-}`;
+
 
 //aca se loo asignamos
 const FormularioModal = ({ modalVisible, setModalVisible }: FormularioModalProps) => {
@@ -38,59 +34,10 @@ const FormularioModal = ({ modalVisible, setModalVisible }: FormularioModalProps
 
   const navi = useNavigation()
 
-  //mutation apolo
-  const [crearUsuario] = useMutation(NUEVA_CUENTA)
-
-  //envia el formulario
-  const handleSubmit = async () => {
-    //validar campos
-    if (nombre === "" || apellido === "" || email === "" || password === ""||telefono==="") {
-      Alert.alert(
-        'Error!',
-        'Todos los campos son obligatorios.',
-      );
-      return;
-    }
-    //password 6 caracteres
-    if (password.length < 6) {
-      Alert.alert(
-        'Error!',
-        'La Contraseña debe contener al menos 6 caracteres.',
-      );
-      return;
-    }
-
-    //guardar usuario
-    try {
-      const { data } = await crearUsuario({
-        variables: {
-          input: {
-            nombre,
-            apellido,
-            telefono,
-            email,
-            password
-          }
-        }
-      })
-
-      Alert.alert(
-        'Usuario Creado!',
-        'Su cuenta fue creada con exito!!.',
-      );
-
-      setModalVisible(!modalVisible)//cambie el estado a lo opuesto a lo q esta
+  
 
 
-    } catch (error) {
-      console.log(error)
-    }
-
-
-  }
-
-
-
+//enviar mail
   const EnviodeEmail = async () => {
     if (!nombre || !apellido || !email || !password || !telefono) {
       Alert.alert('Error', 'Todos los campos son obligatorios.');
@@ -202,13 +149,6 @@ const FormularioModal = ({ modalVisible, setModalVisible }: FormularioModalProps
                 value={password}
                 onChangeText={text => setPassword(text)}
               />
-
-              <Pressable //boton crear
-                style={estilo.boton}
-                onPress={() => handleSubmit()}
-              >
-                <Text style={estilo.BotonText}>CREAR CUENTA</Text>
-              </Pressable>
 
               <Pressable //boton crear
                 style={estilo.boton}

@@ -12,6 +12,7 @@ import { FlatList } from 'react-native-gesture-handler';
 import { gql, useQuery, useMutation } from '@apollo/client';
 import Usuario from './Usuario';
 import { useNavigation } from '@react-navigation/native';
+import CrearUsua from './CrearUsua';
 
 
 
@@ -53,10 +54,10 @@ mutation  actualizarEstado($id:ID!, $input:UsuarioInput, $estado: Boolean){
 
 const Administrador = () => {
 
-
+    const [modalVisible, setModalVisible] = useState (false)
     const [filtro, setFiltro] = useState('');
 
-const navi =useNavigation()
+    const navi = useNavigation()
 
 
     //apollo
@@ -131,21 +132,26 @@ const navi =useNavigation()
 
                     <Text style={styles.subtitulo}>Lista de Usuarios</Text>
 
-                    <View style={{flexDirection:'row', justifyContent:'space-between', alignItems:'center'}}>
-                    <TextInput
-                        style={styles.input}
-                        placeholder="Nombre de Usuario"
-                        keyboardType="default"
-                        value={filtro}
-                        onChangeText={(text) => setFiltro(text)}
-                    />
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <TextInput
+                            style={styles.input}
+                            placeholder="Nombre de Usuario"
+                            keyboardType="default"
+                            value={filtro}
+                            onChangeText={(text) => setFiltro(text)}
+                        />
 
-                    <Pressable //boton crear
-                        style={styles.boton}
-                        onPress={() => navi.navigate('CrearUsuario')}
-                    >
-                        <Text style={styles.BotonText}>+</Text>
-                    </Pressable>
+                        <Pressable onPress={() => setModalVisible(true)
+                        }
+                            style={styles.boton}>
+                            <Text style={styles.BotonText}>+</Text>
+                        </Pressable>
+
+                        <CrearUsua 
+                        modalVisible={modalVisible}
+                        setModalVisible={setModalVisible}
+                        />
+
                     </View>
 
 
@@ -210,8 +216,8 @@ const styles = StyleSheet.create({
         paddingHorizontal: 15,
         marginBottom: 20,
         textAlign: 'center',
-        marginRight:10,
-        fontSize:15
+        marginRight: 10,
+        fontSize: 15
     },
     boton: {
         backgroundColor: 'cyan',
@@ -219,7 +225,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 10,
         width: '20%',
         alignItems: 'center',
-        borderRadius:'30%',
+        borderRadius: '30%',
 
     },
     BotonText: {

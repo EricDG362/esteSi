@@ -21,7 +21,7 @@ const Usuario = ({ item, onPress }) => {
             <View style={[e.caja]}>
 
 
-                <View style={{ flexDirection: 'row', alignItems:'center', justifyContent:'space-between' }}>
+                <View style={{ flexDirection: 'row', alignItems:'center', justifyContent:'space-between'}}>
                     <View>
                         <Text style={e.label}>Nombre:
                             <Text style={e.textoSumario}> {nombre}</Text>
@@ -109,7 +109,7 @@ const e = StyleSheet.create({
            
              
            opacity: 0.7,
-           borderRadius:20
+           marginLeft:10
 
     },
     cajaEstado: {
