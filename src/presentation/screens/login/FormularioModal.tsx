@@ -34,10 +34,10 @@ const FormularioModal = ({ modalVisible, setModalVisible }: FormularioModalProps
 
   const navi = useNavigation()
 
-  
 
 
-//enviar mail
+
+  //enviar mail
   const EnviodeEmail = async () => {
     if (!nombre || !apellido || !email || !password || !telefono) {
       Alert.alert('Error', 'Todos los campos son obligatorios.');
@@ -69,22 +69,38 @@ const FormularioModal = ({ modalVisible, setModalVisible }: FormularioModalProps
   };
 
 
-  const EnviodeEmail2 = (to:string, subject:string, body:string)=>{
+  const EnviodeEmail2 = (to: string, subject: string, body: string) => {
 
     Linking.openURL(`mailto:${to}?subject=${subject}&body=${body}`)
+
+    Alert.alert(
+      'Formulario Enviado',
+      'Usted sera redirigido a MERCADOPAGO para finalizar la transacción',
+      [
+        {
+          text: 'Aceptar',
+          onPress: () => {
+
+            //luego es enviado a mercado pago
+            const url = 'https://mpago.la/1KwJsR7'; // URL de Mercado Pago
+
+            Linking.openURL(url) //q abra ese link mediante el modulo linking
+
+              .catch((err) => { //de lo contrario muestre error
+                console.error('No se pudo abrir el enlace:', err);
+                Alert.alert('Error', 'No se pudo abrir el enlace de pago.');
+              });
+
+          }
+
+        }
+      ]
+    )
 
   }
 
 
-  // //luego es enviado a mercado pago
-  // const url = 'https://mpago.la/1KwJsR7'; // URL de Mercado Pago
 
-  // Linking.openURL(url) //q abra ese link mediante el modulo linking
-
-  //   .catch((err) => { //de lo contrario muestre error
-  //     console.error('No se pudo abrir el enlace:', err);
-  //     Alert.alert('Error', 'No se pudo abrir el enlace de pago.');
-  //   });
 
 
 
@@ -150,6 +166,18 @@ const FormularioModal = ({ modalVisible, setModalVisible }: FormularioModalProps
                 onChangeText={text => setPassword(text)}
               />
 
+<View style={{marginHorizontal:20}}>
+<Text style={{color:'#fff', fontSize: 18, fontWeight:600}}>"Recuerde que, 
+  después de enviar el formulario y realizar el pago de su cuenta, 
+  deberá esperar a que el administrador habilite sus credenciales 
+  una vez que el pago haya sido procesado. ¡Muchas gracias...!!!"
+</Text>
+</View>
+
+
+
+
+
               <Pressable //boton crear
                 style={estilo.boton}
                 onPress=
@@ -160,8 +188,8 @@ const FormularioModal = ({ modalVisible, setModalVisible }: FormularioModalProps
 
               <Pressable //boton crear
                 style={estilo.boton}
-                onPress=      
-              {() => EnviodeEmail2('makarov362edg@gmail.com', `Soy ${nombre} ${apellido}`,` quisiera su svc con este Email: ${email} y esta contraseña ${password}`)}
+                onPress=
+                {() => EnviodeEmail2('makarov362edg@gmail.com', `Soy ${nombre} ${apellido}`, ` quisiera su svc con este Email: ${email} y esta contraseña ${password}`)}
               >
                 <Text style={estilo.BotonText}>Enviar Email con el telefono</Text>
               </Pressable>
