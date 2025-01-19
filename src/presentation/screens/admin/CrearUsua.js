@@ -105,11 +105,21 @@ const CrearUsua = ({modalVisible, setModalVisible}) => {
                 [
                     { //PRIMER BOTON
                         text: 'ACEPTAR',
-                        onPress: () => setModalVisible(!modalVisible),
+                        onPress: () => {
+                            // Restablecer los estados
+                            setNombre('');
+                            setApellido('');
+                            setEmail('');
+                            setTelefono('');
+                            setPassword('');
+    
+                            // Cerrar el modal
+                            setModalVisible(!modalVisible);
+                        },
                     },
                 ]
             );
-
+    
 
 
         } catch (error) {
