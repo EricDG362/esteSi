@@ -1,4 +1,4 @@
-package com.test
+package com.erigonza.AppSumarios
 
 import android.app.Application
 import com.facebook.react.PackageList
