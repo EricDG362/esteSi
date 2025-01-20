@@ -77,9 +77,9 @@ android {
     buildToolsVersion rootProject.ext.buildToolsVersion
     compileSdk rootProject.ext.compileSdkVersion
 
-    namespace "com.erigonza.AppSumarios"
+    namespace "com.ericgonza.AppSumarios"
     defaultConfig {
-        applicationId "com.erigonza.AppSumarios"
+        applicationId "com.ericgonza.AppSumarios"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1

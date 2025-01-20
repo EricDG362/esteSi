@@ -1,4 +1,4 @@
-package com.erigonza.AppSumarios
+package com.ericgonza.AppSumarios
 
 import android.os.Bundle;
 import com.facebook.react.ReactActivity
