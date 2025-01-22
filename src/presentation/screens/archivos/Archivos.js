@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import {
     Keyboard,
     SafeAreaView,
@@ -8,13 +8,13 @@ import {
     TextInput,
     FlatList,
     Alert,
-    Animated
+
 } from 'react-native';
 import { gql, useQuery, useMutation } from '@apollo/client';
 import Archivo from './Archivo';
-import { StackActions, useFocusEffect, useNavigation } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import LinearGradient from 'react-native-linear-gradient';
-import { transform } from 'typescript';
+
 
 
 const OBTENER_PROCEDIMIENTOS = gql`
@@ -102,12 +102,12 @@ const Archivos = () => {
             Alert.alert('Error', 'No se pudo eliminar el procedimiento. Inténtalo nuevamente.');
         }
     };
-   
-    
+
+
 
     const abrirNuevo = (id, procedi, sumarios, fechas) => {
-    
-            navi.navigate("Nuevo", { id, procedi, sumarios, fechas });
+
+        navi.navigate("Nuevo", { id, procedi, sumarios, fechas });
     }
 
 
@@ -148,7 +148,7 @@ const Archivos = () => {
                                 item={item}
                                 onLongPress={mensajeEliminarProce}
                                 onPress={abrirNuevo}
-                                
+
 
                             />
 

@@ -184,6 +184,7 @@ const estilo = StyleSheet.create({
 
   textbtn: {
     textAlign: 'center',
+    fontSize:20
    
   },
 });

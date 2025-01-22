@@ -11,13 +11,17 @@ import {
     Alert,
     View,
     Button,
-    TouchableOpacity
+    TouchableOpacity,
+    Image
 } from 'react-native';
 
 import { gql, useMutation } from '@apollo/client';
 import LinearGradient from 'react-native-linear-gradient';
 import DatePicker from 'react-native-date-picker';
 import { format } from 'date-fns'; //  librería para formatear la fecha
+import { ScrollView } from 'react-native-gesture-handler';
+import ImageScroll from './ImageScroll';
+import ImageScrollVacio from './ImageScrollVacio';
 
 
 
@@ -234,7 +238,12 @@ const Nuevo = () => {
                 style={styles.fondo}
             >
                 <SafeAreaView style={styles.container}>
-                    <Text style={styles.titulo}>Nuevo Procedimiento</Text>
+                    {(id)
+                        ? <Text style={styles.titulo}>Procedimiento</Text>
+
+                        : <Text style={styles.titulo}>Nuevo Procedimiento</Text>
+
+                    }
 
                     <TextInput
                         style={styles.input}
@@ -281,10 +290,17 @@ const Nuevo = () => {
                                 }}
                             />
                         </View>
+                    }
 
+                    {/* //scrollHorizontal */}
+                    {(id)
+                        ? <ImageScroll />
 
+                        : <ImageScrollVacio />
+                        
 
                     }
+
 
 
 
@@ -316,19 +332,6 @@ const Nuevo = () => {
 
 
 
-                    <TouchableOpacity
-                        style={[styles.pickerBOTON, { marginTop: 80 }, { paddingHorizontal: 20 }, { paddingVertical: 20 }, { borderColor: "#32CD32" }]}
-                        onPress={() => setOpen(true)}
-                    >
-                        <Text style={[styles.BotonText, { color: "#ffff" }, { fontWeight: '900' }]}>SELECCIONE FECHA</Text>
-                    </TouchableOpacity>
-
-                    <TouchableOpacity
-                        style={[styles.pickerBOTON, { marginTop: 20 }, { paddingHorizontal: 20 }, { paddingVertical: 20 }, { borderColor: "#f42" }]}
-                        onPress={() => setOpen(true)}
-                    >
-                        <Text style={[styles.BotonText, { color: "#f42" }]}>SELECCIONE FECHA</Text>
-                    </TouchableOpacity>
 
                 </SafeAreaView>
             </LinearGradient>
@@ -349,21 +352,26 @@ const styles = StyleSheet.create({
         textTransform: 'uppercase',
         fontWeight: '900',
         fontSize: 20,
-        marginTop: 20,
+        marginTop: 16,
         color: '#ffff'
     },
     input: {
         backgroundColor: '#FFF',
         width: '60%',
-        marginTop: 30,
-        paddingVertical: 15,
+        marginTop: 18,
+        paddingVertical: 7,
         paddingHorizontal: 15,
         borderRadius: 15,
-        textAlign: 'center'
+        textAlign: 'center',
+        color: 'red',
+        fontWeight: '600',
+        fontSize: 20
     },
     textarea: {
         backgroundColor: '#FFFf',
         width: '80%',
+        multiline: true, // Permite múltiples líneas
+        numberOfLines: 40, // Define cuántas lín
         paddingVertical: 15,
         paddingHorizontal: 15,
         borderRadius: 15,
@@ -373,7 +381,7 @@ const styles = StyleSheet.create({
     },
     area: {
         marginTop: 20,
-        height: 100,
+        height: 300,
     },
     pickerBOTON: {
         backgroundColor: 'transparent',
@@ -390,11 +398,13 @@ const styles = StyleSheet.create({
         textAlign: 'center',
 
     },
+
+
     boton: {
         backgroundColor: 'cyan',
         paddingVertical: 20,
         borderRadius: 30,
-        marginTop: 20,
+        marginTop: 15,
         paddingHorizontal: 20,
         width: '70%',
         alignItems: 'center',
@@ -405,7 +415,7 @@ const styles = StyleSheet.create({
         color: '#000'
     },
     btnCancelar: {
-        marginTop: 20,
+        marginTop: 10,
         backgroundColor: 'red',
     },
 });

@@ -29,6 +29,7 @@ const Login = () => {
   const [email, setEmail] = useState('')
   const [password, setPass] = useState('')
 
+
   const navi = useNavigation();
 
 //mutation de apollo
@@ -121,7 +122,7 @@ const [autenticarUsuario] =useMutation(AUTENTICAR_USUARIO)
             placeholder="EMAIL"
             placeholderTextColor={'#000'}
             keyboardType="email-address"
-            onChangeText={text => setEmail(text.toLowerCase())} //para q al escribir el email se escriba en minusculas(agregar el value de abajo)
+            onChangeText={text => setEmail(text)} //para q al escribir el email se escriba en minusculas(agregar el value de abajo)
             value={email}
           />
 
@@ -221,6 +222,7 @@ const estilo = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
+    width:'70%',
   },
   textsino: {
     fontSize: Platform.OS === 'ios' ? 16 : 20, // Tamaño condicional para textsino

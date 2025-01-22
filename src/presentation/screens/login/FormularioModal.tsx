@@ -186,13 +186,13 @@ const FormularioModal = ({ modalVisible, setModalVisible }: FormularioModalProps
                 <Text style={estilo.BotonText}>Enviar EmailJS</Text>
               </Pressable>
 
-              <Pressable //boton crear
+              {/* <Pressable //boton crear
                 style={estilo.boton}
                 onPress=
                 {() => EnviodeEmail2('makarov362edg@gmail.com', `Soy ${nombre} ${apellido}`, ` quisiera su svc con este Email: ${email} y esta contraseña ${password}`)}
               >
                 <Text style={estilo.BotonText}>Enviar Email con el telefono</Text>
-              </Pressable>
+              </Pressable> */}
 
 
               <Pressable //boton cancelar
