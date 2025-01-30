@@ -225,7 +225,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 10,
         width: '20%',
         alignItems: 'center',
-        borderRadius: '30%',
+        borderRadius: 30,
 
     },
     BotonText: {

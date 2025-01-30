@@ -8,6 +8,9 @@ import {
     TextInput,
     FlatList,
     Alert,
+    View,
+    Pressable,
+    ActivityIndicator
 
 } from 'react-native';
 import { gql, useQuery, useMutation } from '@apollo/client';
@@ -54,6 +57,7 @@ const Archivos = () => {
 
 
 
+
     const { data, loading, error } = useQuery(OBTENER_PROCEDIMIENTOS);
 
     const [eliminarProcedimiento] = useMutation(ELIMINAR_PROCEDIMIENTO, {
@@ -77,7 +81,10 @@ const Archivos = () => {
         },
     });
 
-    if (loading) return <Text style={styles.titulo}>Cargando...</Text>;
+    if (loading) return <ActivityIndicator
+        color="red"
+        size={'large'}
+    />;
 
     if (error) {
         console.log('Error al cargar datos:', error);
@@ -106,6 +113,7 @@ const Archivos = () => {
 
 
     const abrirNuevo = (id, procedi, sumarios, fechas) => {
+
 
         navi.navigate("Nuevo", { id, procedi, sumarios, fechas });
     }
@@ -138,26 +146,46 @@ const Archivos = () => {
                         onChangeText={(text) => setFiltro(text)}
                     />
 
-                    {/* FlatList muestra procedimientos filtrados */}
-                    <FlatList
-                        data={procedimientosFiltrados}
-                        renderItem={({ item }) => (
+                    {(loading) ?
+                        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                            <ActivityIndicator size="80" color="red" />
+                        </View>
+                        :
+                        <FlatList
+                            style={{ width: '70%', flex: 1 }}
+                            data={procedimientosFiltrados.slice().reverse()} //slice crea una copia//reverse invierte el orden parta q aparesca elprimero
+                            renderItem={({ item }) => (
 
-                            //estas son las
-                            <Archivo
-                                item={item}
-                                onLongPress={mensajeEliminarProce}
-                                onPress={abrirNuevo}
+                                //estas son las
+                                <Archivo
+                                    item={item}
+                                    onLongPress={mensajeEliminarProce}
+                                    onPress={abrirNuevo}
 
 
-                            />
+                                />
 
-                        )}
-                        keyExtractor={(item) => item.id.toString()}
-                        ListEmptyComponent={
-                            <Text style={styles.titulo}>No hay procedimientos disponibles</Text>
-                        }
-                    />
+                            )}
+                            keyExtractor={(item) => item.id.toString()}
+                            ListEmptyComponent={
+                                <Text style={styles.titulo}>No hay procedimientos disponibles</Text>
+                            }
+                        />
+
+                    }
+
+
+
+                    <Pressable
+                        onPress={() => navi.navigate('Nuevo')}
+                        style={[styles.btnCrear, styles.footer]}
+                    >
+                        <Text style={[styles.textbtn]}>
+                            NUEVO
+                        </Text>
+
+                    </Pressable>
+
 
 
 
@@ -191,7 +219,9 @@ const styles = StyleSheet.create({
         paddingVertical: 15,
         paddingHorizontal: 15,
         borderRadius: 15,
-        textAlign: 'center'
+        textAlign: 'center',
+        fontSize: 18,
+
     },
     boton: {
         backgroundColor: 'cyan',
@@ -209,6 +239,32 @@ const styles = StyleSheet.create({
     btnCancelar: {
         marginBottom: 10,
         backgroundColor: 'red',
+    },
+    btnCrear: {
+        width: '80%', // Ahora ocupa el 80% del ancho del contenedor padre
+        borderRadius: 30,
+        marginBottom: 20,
+        paddingVertical: 15,
+        justifyContent: 'center', // Centra el texto verticalmente
+        alignItems: 'center', // Centra el texto horizontalmente
+
+    },
+
+    textbtn: {
+        textAlign: 'center',
+        fontSize: 20,
+        fontWeight: '800',
+
+    },
+    footer: {
+        position: 'absolute',
+        bottom: 0,
+        width: '80%',
+        backgroundColor: 'cyan',
+        padding: 10,
+        alignItems: 'center',
+        opacity: 0.7,
+        padding: 20
     },
 });
 

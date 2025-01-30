@@ -166,13 +166,13 @@ const FormularioModal = ({ modalVisible, setModalVisible }: FormularioModalProps
                 onChangeText={text => setPassword(text)}
               />
 
-<View style={{marginHorizontal:20}}>
-<Text style={{color:'#fff', fontSize: 18, fontWeight:600}}>"Recuerde que, 
-  después de enviar el formulario y realizar el pago de su cuenta, 
-  deberá esperar a que el administrador habilite sus credenciales 
-  una vez que el pago haya sido procesado. ¡Muchas gracias...!!!"
-</Text>
-</View>
+              <View style={{ marginHorizontal: 20 }}>
+                <Text style={{ color: '#fff', fontSize: 18, fontWeight: 600 }}>"Recuerde que,
+                  después de enviar el formulario y realizar el pago de su cuenta,
+                  deberá esperar a que el administrador habilite sus credenciales
+                  una vez que el pago haya sido procesado. ¡Muchas gracias...!!!"
+                </Text>
+              </View>
 
 
 

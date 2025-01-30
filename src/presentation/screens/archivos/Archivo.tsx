@@ -86,7 +86,7 @@ const e = StyleSheet.create({
   caja: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    backgroundColor: '#fff',
+    backgroundColor: '#F5F5F5', //gris muy claro
     marginVertical: 5,
     borderRadius: 5,
     padding: 20,
@@ -109,7 +109,8 @@ const e = StyleSheet.create({
     color: '#374151',
     textTransform: 'uppercase',
     fontWeight: 700,
-    marginBottom: 10
+    marginBottom: 10,
+    fontSize:20,
 
 
   },
@@ -125,20 +126,24 @@ const e = StyleSheet.create({
   textofecha: {
 
     color: "#800000",
+    fontSize:15,
+    fontWeight:'500'
 
   },
 
   botonEliminar: {
     backgroundColor: '#CC0000',
     alignItems: 'flex-end',
-    padding: 5,
+    padding: 10,
     marginBottom: 55,
     borderRadius: 5,
     alignContent: 'center'
   },
   textEliminar: {
     color: '#ffff',
-    fontWeight: '700'
+    fontWeight: '900',
+    fontSize:18
+
   },
 
 

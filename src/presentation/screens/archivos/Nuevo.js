@@ -51,6 +51,7 @@ const OBTENER_PROCEDIMIENTOS = gql`
 const ACTUALIZAR_PROCEDIMIENTO = gql`
   mutation actualizarProcedimiento($id: ID!, $input: ProcedimientoInput) {
     actualizarProcedimiento(id: $id, input: $input) {
+        
       sumario
       proce
       fecha
@@ -109,23 +110,16 @@ const Nuevo = () => {
     });
     const [actualizarProcedimiento] = useMutation(ACTUALIZAR_PROCEDIMIENTO, {
         update(cache, { data: { actualizarProcedimiento } }) {
-            const data = cache.readQuery({
-                query: OBTENER_PROCEDIMIENTOS,
-            });
-
-            if (data?.obtenerProcedimientos) {
-                const procedimientosActualizados = data.obtenerProcedimientos.map((item) =>
-                    item.id === actualizarProcedimiento.id ? actualizarProcedimiento : item
-                );
-
-                cache.writeQuery({
-                    query: OBTENER_PROCEDIMIENTOS,
-                    data: {
-                        obtenerProcedimientos: procedimientosActualizados,
+            cache.modify({
+                fields: {
+                    obtenerProcedimientos(existingProcedimientos = []) {
+                        return existingProcedimientos.map((proc) =>
+                            proc.id === actualizarProcedimiento.id ? actualizarProcedimiento : proc
+                        );
                     },
-                });
-            }
-        },
+                },
+            });
+        }
 
     })
 
@@ -169,8 +163,14 @@ const Nuevo = () => {
                 },
             });
 
-            Alert.alert('Guardado', 'Procedimiento Guardado con Éxito!!!', [{ text: 'Aceptar' }]);
-            navi.navigate('Archivos');
+            Alert.alert('Guardado', 'Procedimiento Guardado con Éxito!!!',
+                [
+                    {
+                        text: 'Aceptar',
+                        onPress: () => navi.navigate('Archivos')
+                    }
+                ]);
+
         } catch (error) {
             let errorMessage = '';
 
@@ -210,8 +210,14 @@ const Nuevo = () => {
                 },
             });
 
-            Alert.alert('Guardado', 'Procedimiento Actualizado con Éxito!!!', [{ text: 'Aceptar' }]);
-            navi.navigate('Archivos');
+            Alert.alert('Guardado', 'Procedimiento Actualizado con Éxito!!!',
+                [
+                    {
+                        text: 'Aceptar',
+                        onPress: () => navi.navigate('Archivos')
+                    }
+                ]);
+
         } catch (error) {
             let errorMessage = '';
 
@@ -258,7 +264,7 @@ const Nuevo = () => {
                         placeholder="INGRESE SU PROCEDIMIENTO"
                         keyboardType="default"
                         multiline={true}
-                        numberOfLines={10}
+                        numberOfLines={25}
                         textAlignVertical="top"
                         value={proce}
                         onChangeText={(text) => setProce(text)}
@@ -267,7 +273,7 @@ const Nuevo = () => {
                     {/* //FECHAAAA */}
 
                     {(fechasFromRoute) ?
-                        <Text style={[styles.BotonText, { color: "#FFFF" }]}>CON FECHA: {fechaParaM}     </Text>
+                        <Text style={[styles.BotonText, { color: "#FFFF",marginBottom:50 }]}>CON FECHA: {fechaParaM}     </Text>
                         :
                         <View >
                             <TouchableOpacity
@@ -293,13 +299,13 @@ const Nuevo = () => {
                     }
 
                     {/* //scrollHorizontal */}
-                    {(id)
+                    {/* {(id)
                         ? <ImageScroll />
 
                         : <ImageScrollVacio />
-                        
 
-                    }
+
+                    } */}
 
 
 
@@ -351,7 +357,7 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         textTransform: 'uppercase',
         fontWeight: '900',
-        fontSize: 20,
+        fontSize: 30,
         marginTop: 16,
         color: '#ffff'
     },
@@ -375,25 +381,25 @@ const styles = StyleSheet.create({
         paddingVertical: 15,
         paddingHorizontal: 15,
         borderRadius: 15,
-        fontSize: 18, // Tamaño de la fuente
+        fontSize: 20, // Tamaño de la fuente
         fontStyle: 'italic',
         fontWeight: '500', // Peso de la fuente (normal, bold, e
     },
     area: {
         marginTop: 20,
-        height: 300,
+        height: 500,
     },
     pickerBOTON: {
         backgroundColor: 'transparent',
         paddingVertical: 10,
         borderRadius: 30,
-        marginTop: 10,
+        marginTop: 20,
+        marginBottom: 40,
         paddingHorizontal: 20,
         width: '70%',
         alignItems: 'center',
         borderWidth: 2, // Definir el grosor del borde
         borderColor: '#f3f3f3',
-
         fontWeight: '800',
         textAlign: 'center',
 
@@ -404,7 +410,7 @@ const styles = StyleSheet.create({
         backgroundColor: 'cyan',
         paddingVertical: 20,
         borderRadius: 30,
-        marginTop: 15,
+        marginTop: 5,
         paddingHorizontal: 20,
         width: '70%',
         alignItems: 'center',
@@ -412,10 +418,11 @@ const styles = StyleSheet.create({
     BotonText: {
         fontWeight: '800',
         textAlign: 'center',
-        color: '#000'
+        color: '#000',
+        fontSize: 18
     },
     btnCancelar: {
-        marginTop: 10,
+        marginTop: 18,
         backgroundColor: 'red',
     },
 });

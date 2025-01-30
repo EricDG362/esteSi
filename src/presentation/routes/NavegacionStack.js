@@ -22,6 +22,7 @@ const NavegacionStack = () => {
       screenOptions={{
         headerStyle: { backgroundColor: '#000000' },
         headerTitleStyle: { fontWeight: '500', color: '#FFFFFF', fontSize: 20 },
+        headerTintColor: '#FFFFFF', // Cambia el color de la flecha de retroceso a blanco
       }}
     >
       <Stack.Screen
