@@ -10,7 +10,8 @@ import {
     Alert,
     View,
     Pressable,
-    ActivityIndicator
+    ActivityIndicator,
+    Image
 
 } from 'react-native';
 import { gql, useQuery, useMutation } from '@apollo/client';
@@ -88,7 +89,8 @@ const Archivos = () => {
 
     if (error) {
         console.log('Error al cargar datos:', error);
-        return <Text style={styles.titulo}>Error al cargar datos</Text>;
+        return 
+       
     }
 
     const mensajeEliminarProce = (id) => {
@@ -147,8 +149,8 @@ const Archivos = () => {
                     />
 
                     {(loading) ?
-                        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                            <ActivityIndicator size="80" color="red" />
+                        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor:'#000' }}>
+                            <ActivityIndicator size={80} color="red" />
                         </View>
                         :
                         <FlatList

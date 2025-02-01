@@ -117,6 +117,7 @@ const [autenticarUsuario] =useMutation(AUTENTICAR_USUARIO)
           style={estilo.background}
           resizeMode="cover"
         >
+          
           <TextInput
             style={[estilo.input, estilo.inputPrime]}
             placeholder="EMAIL"
@@ -138,20 +139,25 @@ const [autenticarUsuario] =useMutation(AUTENTICAR_USUARIO)
 
           <Pressable
             style={estilo.boton}
-            onPress={() => {
-              //navi.dispatch(StackActions.replace('NavegacionTop'));
-              iniciarSesion()
+            onPress={() =>{
+              navi.navigate('NavegacionTop' as never);  
+             // iniciarSesion()
             }}
           >
             <Text style={estilo.botontext}>INGRESAR</Text>
           </Pressable>
 
+
           <View style={estilo.padre}>
+            <View style={estilo.sesenta}>
             <Text style={[estilo.textsino, estilo.text]}>Si no posees una cuenta. </Text>
             <Pressable onPress={() => setModalVisible(true)}>
               <Text style={[estilo.text, estilo.textcreate]}>CREAR UNA CUENTA</Text>
             </Pressable>
+            </View>
           </View>
+
+
 
           <FormularioModal
             modalVisible={modalVisible}
@@ -166,32 +172,28 @@ const [autenticarUsuario] =useMutation(AUTENTICAR_USUARIO)
 const estilo = StyleSheet.create({
   container: {
     flex: 1,
+    width:'100%'
   },
   background: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    width:'100%',
   },
   input: {
     backgroundColor: 'rgba(255, 255, 255, 0.5)',
     borderRadius: 15,
     width: '80%',
-    height: 60,
-    padding: 20, // Aplica padding en todas las direcciones
+    height: 40,
     marginBottom: 15,
     textAlign: 'center',
     textAlignVertical: 'center', // Alinea verticalmente el texto
     color: '#fff',
     fontWeight: '700',
-    fontSize:20
+    fontSize:16
   },
   inputPrime: {
-    marginTop: 450,
-  },
-  inputContainer: {
-    position: 'relative',
-    width: '80%',
-    marginBottom: 20,
+    marginTop: 400,
   },
  
   toggleButton: {
@@ -205,32 +207,42 @@ const estilo = StyleSheet.create({
   },
   text: {
     color: '#ffff',
-    marginTop: 40,
+   
   },
   boton: {
     backgroundColor: '#ffff',
-    width: '50%',
-    borderRadius: 10,
+    width: '80%',
+    borderRadius: 30,
     paddingVertical: 15,
   },
   botontext: {
     textAlign: 'center',
     fontWeight: '900',
-    fontSize:20
+    fontSize:20,
+
   },
   padre: {
+    marginTop:20,
+   
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    width:'70%',
+    width:'80%',
   },
   textsino: {
-    fontSize: Platform.OS === 'ios' ? 16 : 20, // Tamaño condicional para textsino
+    fontSize: Platform.OS === 'ios' ? 16 : 14, // Tamaño condicional para textsino
   },
   textcreate: {
-    fontSize: Platform.OS === 'ios' ? 18 : 20, // Tamaño condicional para textcreate
+    fontSize: Platform.OS === 'ios' ? 18 : 16, // Tamaño condicional para textcreate
     fontWeight: 'bold',
     color: 'cyan',
+  },
+  sesenta:{
+    
+   
+    width:'80%',
+    alignItems:'center',
+    justifyContent:'center'
   },
 });
 

@@ -6,7 +6,7 @@ import Archivo from '../screens/archivos/Archivo';
 import Nuevo from '../screens/archivos/Nuevo';
 import Login from '../screens/login/Login';
 import Administrador from '../screens/admin/Administrador';
-import CrearUsuario from '../screens/admin/CrearUsua'
+import CrearUsua from '../screens/admin/CrearUsua';
 
 
 
@@ -46,6 +46,16 @@ const NavegacionStack = () => {
         component={Administrador}
         options={{
           title: 'Administrador',
+          headerShown: false
+        }
+        }
+      />
+
+      <Stack.Screen
+        name="CrearUsua"
+        component={CrearUsua}
+        options={{
+          title: 'Crear Usuario',
           headerShown: false
         }
         }

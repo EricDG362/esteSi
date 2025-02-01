@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 import {   Text, Modal, SafeAreaView, StyleSheet, TextInput, View, Pressable,
     TouchableWithoutFeedback, Keyboard,
-    KeyboardAvoidingView,
     Platform,
     Alert, } from 'react-native'
     import { gql, useQuery, useMutation } from '@apollo/client';
@@ -139,10 +138,7 @@ const CrearUsua = ({modalVisible, setModalVisible}) => {
             visible={modalVisible}
         >
             <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-                <KeyboardAvoidingView
-                    style={estilo.container}
-                    behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-                >
+               
                     <SafeAreaView style={estilo.container}>
 
 
@@ -169,6 +165,7 @@ const CrearUsua = ({modalVisible, setModalVisible}) => {
                             <Text style={estilo.label} >TELEFONO</Text>
                             <TextInput
                                 style={estilo.input}
+                                keyboardType='numeric'
                                 value={telefono}
                                 onChangeText={text => setTelefono(text)}
                             />
@@ -178,7 +175,8 @@ const CrearUsua = ({modalVisible, setModalVisible}) => {
                             <Text style={estilo.label} >EMAIL</Text>
                             <TextInput
                                 style={estilo.input}
-                                onChangeText={text => setEmail(text.toLowerCase())}
+                                keyboardType='email-address'
+                                onChangeText={text => setEmail(text)}
                                 value={email}
 
                             />
@@ -202,7 +200,7 @@ const CrearUsua = ({modalVisible, setModalVisible}) => {
 
                             <Pressable //boton cancelar
                                 style={[estilo.boton, , estilo.btnCancelar]}
-                                onPress={() => setModalVisible(!modalVisible)}
+                                onPress={() => setModalVisible(false)}
                             >
                                 <Text style={[estilo.BotonText]}>CANCELAR</Text>
                             </Pressable>
@@ -215,7 +213,7 @@ const CrearUsua = ({modalVisible, setModalVisible}) => {
 
 
                     </SafeAreaView>
-                </KeyboardAvoidingView>
+                
             </TouchableWithoutFeedback>
         </Modal>
 

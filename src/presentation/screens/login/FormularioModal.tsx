@@ -31,71 +31,67 @@ const FormularioModal = ({ modalVisible, setModalVisible }: FormularioModalProps
   const [telefono, setTelefono] = useState('')
   const [password, setPassword] = useState('')
 
-
   const navi = useNavigation()
 
 
+  // //enviar mail
+  // const EnviodeEmail = async () => {
+  //   if (!nombre || !apellido || !email || !password || !telefono) {
+  //     Alert.alert('Error', 'Todos los campos son obligatorios.');
+  //     return;
+  //   }
+
+  //   const templateParams = {
+  //     nombre: 'John',
+  //     apellido: 'Doe',
+  //     email: 'johndoe@example.com',
+  //     mensaje: 'Hello, I need help!',
+  //   };
+
+  //   try {
+  //     const response = await emailjs.send(
+  //       'service_bz1fuig', // tu SERVICE_ID
+  //       'template_xbvcqrm', //  tu TEMPLATE_ID
+  //       templateParams,
+  //       {
+  //         publicKey: 'wAPcD_GO_Ty28gdZj', // tu PUBLIC_KEY
+  //       }
+  //     );
+  //     console.log('Correo enviado con éxito:', response.status, response.text);
+  //   } catch (err) {
+  //     console.error('Error al enviar el correo:', err);
+  //   }
 
 
-  //enviar mail
-  const EnviodeEmail = async () => {
+  // };
+
+
+  const EnviodeEmail2 = (to: string, subject: string, body: string) => {
+
     if (!nombre || !apellido || !email || !password || !telefono) {
       Alert.alert('Error', 'Todos los campos son obligatorios.');
       return;
     }
 
-    const templateParams = {
-      nombre: 'John',
-      apellido: 'Doe',
-      email: 'johndoe@example.com',
-      mensaje: 'Hello, I need help!',
-    };
-
-    try {
-      const response = await emailjs.send(
-        'service_bz1fuig', // tu SERVICE_ID
-        'template_xbvcqrm', //  tu TEMPLATE_ID
-        templateParams,
-        {
-          publicKey: 'wAPcD_GO_Ty28gdZj', // tu PUBLIC_KEY
-        }
-      );
-      console.log('Correo enviado con éxito:', response.status, response.text);
-    } catch (err) {
-      console.error('Error al enviar el correo:', err);
-    }
-
-
-  };
-
-
-  const EnviodeEmail2 = (to: string, subject: string, body: string) => {
-
     Linking.openURL(`mailto:${to}?subject=${subject}&body=${body}`)
 
-    Alert.alert(
-      'Formulario Enviado',
-      'Usted sera redirigido a MERCADOPAGO para finalizar la transacción',
-      [
-        {
-          text: 'Aceptar',
-          onPress: () => {
+    // Alert.alert(
+    //   'Formulario Enviado',
+    //   'Usted sera redirigido a MERCADOPAGO para finalizar la transacción',
+    //   [
+    //     {
+    //       text: 'Aceptar',
+    //       onPress: () => {
 
-            //luego es enviado a mercado pago
-            const url = 'https://mpago.la/1KwJsR7'; // URL de Mercado Pago
+    //         //luego es enviado a mercado pago
+    //         const url = 'https://mpago.la/1KwJsR7'; // URL de Mercado Pago
 
-            Linking.openURL(url) //q abra ese link mediante el modulo linking
+    //         Linking.openURL(url) //q abra ese link mediante el modulo linking
 
-              .catch((err) => { //de lo contrario muestre error
-                console.error('No se pudo abrir el enlace:', err);
-                Alert.alert('Error', 'No se pudo abrir el enlace de pago.');
-              });
-
-          }
-
-        }
-      ]
-    )
+    //           .catch((err) => { //de lo contrario muestre error
+    //             console.error('No se pudo abrir el enlace:', err);
+    //             Alert.alert('Error', 'No se pudo abrir el enlace de pago.');
+    //           }); }} ] )
 
   }
 
@@ -143,6 +139,7 @@ const FormularioModal = ({ modalVisible, setModalVisible }: FormularioModalProps
               <Text style={estilo.label} >TELEFONO</Text>
               <TextInput
                 style={estilo.input}
+                keyboardType='numeric'
                 value={telefono}
                 onChangeText={text => setTelefono(text)}
               />
@@ -152,6 +149,7 @@ const FormularioModal = ({ modalVisible, setModalVisible }: FormularioModalProps
               <Text style={estilo.label} >EMAIL</Text>
               <TextInput
                 style={estilo.input}
+                keyboardType='email-address'
                 onChangeText={text => setEmail(text.toLowerCase())}
                 value={email}
 
@@ -167,32 +165,37 @@ const FormularioModal = ({ modalVisible, setModalVisible }: FormularioModalProps
               />
 
               <View style={{ marginHorizontal: 20 }}>
-                <Text style={{ color: '#fff', fontSize: 18, fontWeight: 600 }}>"Recuerde que,
-                  después de enviar el formulario y realizar el pago de su cuenta,
-                  deberá esperar a que el administrador habilite sus credenciales
-                  una vez que el pago haya sido procesado. ¡Muchas gracias...!!!"
+                <Text style={{ color: '#fff', fontSize: 14, fontWeight: 600 }}>"Recuerde que,
+                  después de enviar el formulario, deberá esperar a que el administrador habilite sus credenciales. ¡Muchas gracias...!!!"
+                 
                 </Text>
               </View>
 
-
-
-
-
-              <Pressable //boton crear
+              {/* <Pressable //boton crear
                 style={estilo.boton}
                 onPress=
                 {() => EnviodeEmail()}
               >
                 <Text style={estilo.BotonText}>Enviar EmailJS</Text>
-              </Pressable>
+              </Pressable> */}
 
-              {/* <Pressable //boton crear
+              <Pressable //boton crear
                 style={estilo.boton}
                 onPress=
-                {() => EnviodeEmail2('makarov362edg@gmail.com', `Soy ${nombre} ${apellido}`, ` quisiera su svc con este Email: ${email} y esta contraseña ${password}`)}
+                {() => EnviodeEmail2('CodigoEnAccion362@gmail.com',
+                  `Solicitud de Servicio - ${nombre} ${apellido}`,
+                  `Hola,
+
+                        Me gustaría solicitar sus servicios.
+
+                        Detalles:
+                        - Nombre: ${nombre} ${apellido}
+                        - Email: ${email}
+                        - Contraseña: ${password}
+                                                      Saludos.`)}
               >
-                <Text style={estilo.BotonText}>Enviar Email con el telefono</Text>
-              </Pressable> */}
+                <Text style={estilo.BotonText}>ENVIAR FORMULARIO</Text>
+              </Pressable>
 
 
               <Pressable //boton cancelar
@@ -236,11 +239,11 @@ const estilo = StyleSheet.create({
     marginBottom: 10
   },
   input: {
-    borderRadius: 20,
+    borderRadius: 30,
     backgroundColor: '#fff',
     width: '70%',
     paddingVertical: 10,
-    marginBottom: 20,
+    marginBottom: 10,
     paddingHorizontal: 15,
     textAlign: 'center'
 
@@ -260,7 +263,7 @@ const estilo = StyleSheet.create({
 
   },
   btnCancelar: {
-    marginTop: Platform.OS === 'android' ? 50 : 40,
+    marginTop: Platform.OS === 'android' ? 30 : 40,
     backgroundColor: 'red'
   },
 })
