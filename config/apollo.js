@@ -4,9 +4,11 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { setContext } from 'apollo-link-context';
 import { Platform } from 'react-native';
 
-
+const ip_mac = '192.168.100.156'
 const httpLink = createHttpLink({
-  uri: Platform.OS === 'ios' ? 'http://localhost:4000/': 'http://10.0.2.2:4000/'
+  //uri: Platform.OS === 'ios' ? 'http://localhost:4000/': 'http://10.0.2.2:4000/'
+  uri: Platform.OS === 'ios' ? 'http://localhost:4000/': `http://${ip_mac}:4000/`
+
 
 })
 

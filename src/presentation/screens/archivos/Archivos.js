@@ -94,7 +94,7 @@ const Archivos = () => {
     }
 
     const mensajeEliminarProce = (id) => {
-        Alert.alert('¿Deseas Eliminar este Procedimiento?', 'Si se elimina no se podra recuperar', [
+        Alert.alert('¿Deseas Eliminar?', 'Si eliminas este procedimiento no podrás recuperarlo', [
             { text: 'Cancelar', style: 'cancel' },
             { text: 'Eliminar', onPress: () => EliminarProce(id) },
         ]);
@@ -132,8 +132,8 @@ const Archivos = () => {
     return (
         <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
             <LinearGradient
-                colors={['#000000', '#013220']} // Negro a verde oscuro
-                locations={[0.005, 1]} // El negro ocupa el 30% y el verde oscuro empieza desde ahí hasta el final
+                colors={['#000000', '#274d60']} // Negro a gris oscuro
+                locations={[0.1, 1]} // El negro ocupa el 10% y el gris oscuro empieza desde ahí hasta el final // El negro ocupa el 30% y el verde oscuro empieza desde ahí hasta el final
                 style={styles.fondo}
             >
                 <SafeAreaView style={styles.container}>
@@ -143,6 +143,7 @@ const Archivos = () => {
                     <TextInput
                         style={styles.input}
                         placeholder="N° de SUMARIO"
+                        placeholderTextColor={'gray'}
                         keyboardType="default"
                         value={filtro}
                         onChangeText={(text) => setFiltro(text)}
@@ -154,7 +155,7 @@ const Archivos = () => {
                         </View>
                         :
                         <FlatList
-                            style={{ width: '70%', flex: 1 }}
+                            style={{ width: '80%', flex: 1 }}
                             data={procedimientosFiltrados.slice().reverse()} //slice crea una copia//reverse invierte el orden parta q aparesca elprimero
                             renderItem={({ item }) => (
 
@@ -169,6 +170,7 @@ const Archivos = () => {
 
                             )}
                             keyExtractor={(item) => item.id.toString()}
+                            showsVerticalScrollIndicator={false}
                             ListEmptyComponent={
                                 <Text style={styles.titulo}>No hay procedimientos disponibles</Text>
                             }
@@ -182,7 +184,7 @@ const Archivos = () => {
                         onPress={() => navi.navigate('Nuevo')}
                         style={[styles.btnCrear, styles.footer]}
                     >
-                        <Text style={[styles.textbtn]}>
+                        <Text style={[styles.textbtn]}>CREAR 
                             NUEVO
                         </Text>
 
@@ -209,20 +211,20 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         textTransform: 'uppercase',
         fontWeight: '900',
-        marginTop: 30,
+        marginTop: 20,
         color: '#fff',
-        fontSize: 30
+        fontSize: 28
     },
     input: {
         backgroundColor: '#FFF',
         width: '60%',
         marginTop: 30,
-        marginBottom: 40,
+        marginBottom: 10,
         paddingVertical: 15,
         paddingHorizontal: 15,
         borderRadius: 15,
         textAlign: 'center',
-        fontSize: 18,
+        fontSize: 16,
 
     },
     boton: {
@@ -246,7 +248,7 @@ const styles = StyleSheet.create({
         width: '80%', // Ahora ocupa el 80% del ancho del contenedor padre
         borderRadius: 30,
         marginBottom: 20,
-        paddingVertical: 15,
+        paddingVertical: 10,
         justifyContent: 'center', // Centra el texto verticalmente
         alignItems: 'center', // Centra el texto horizontalmente
 
@@ -254,15 +256,15 @@ const styles = StyleSheet.create({
 
     textbtn: {
         textAlign: 'center',
-        fontSize: 20,
-        fontWeight: '800',
+        fontSize: 28,
+        fontWeight: '900',
 
     },
     footer: {
         position: 'absolute',
         bottom: 0,
-        width: '80%',
-        backgroundColor: 'cyan',
+        width: '90%',
+        backgroundColor: '#274d60',
         padding: 10,
         alignItems: 'center',
         opacity: 0.7,

@@ -140,8 +140,8 @@ const [autenticarUsuario] =useMutation(AUTENTICAR_USUARIO)
           <Pressable
             style={estilo.boton}
             onPress={() =>{
-              navi.navigate('NavegacionTop' as never);  
-             // iniciarSesion()
+              //navi.navigate('NavegacionTop' as never);  
+              iniciarSesion()
             }}
           >
             <Text style={estilo.botontext}>INGRESAR</Text>

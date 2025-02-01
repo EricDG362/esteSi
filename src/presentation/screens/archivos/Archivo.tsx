@@ -88,8 +88,10 @@ const e = StyleSheet.create({
     justifyContent: 'space-between',
     backgroundColor: '#F5F5F5', //gris muy claro
     marginVertical: 5,
-    borderRadius: 5,
-    padding: 20,
+    borderRadius: 18,
+    width:'100%',
+    paddingHorizontal: 20,
+    paddingVertical:10,
     borderBottomColor: '#FF0000',
     borderWidth: 3,
     //sombra para la caja

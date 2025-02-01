@@ -53,7 +53,7 @@ const Home = () => {
   const [animacionTexto] = useState(new Animated.Value(1));
   const animacionColor = animacion1.interpolate({
     inputRange: [-80, 0],
-    outputRange: ['#ffffff', 'cyan'], // Cambia de celeste a verde
+    outputRange: ['#ffffff', '#6ba3be'], // Cambia de celeste a verde
   });
 
 
@@ -102,7 +102,7 @@ const Home = () => {
   useFocusEffect( //importamos de navigation 
     React.useCallback(() => {
       // Resetear animaciones cuando se regrese a la pantalla de inicio
-      animacionTexto.setValue(1)
+      animacionTexto.setValue(1); //  Asegurarse de que el texto reaparezca
       animacion1.setValue(0);
       animacion2.setValue(1);
       Animated.timing(animacion1, {
@@ -134,8 +134,8 @@ const Home = () => {
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
       <LinearGradient
-        colors={['#000000', '#013220']} // Negro a verde oscuro
-        locations={[0.2, 1]} // El negro ocupa el 30% y el verde oscuro empieza desde ahí hasta el final
+        colors={['#000000', '#274d60']} // Negro a verde oscuro
+        locations={[0.1, 1]} // El negro ocupa el 30% y el verde oscuro empieza desde ahí hasta el final
         style={estilo.fondo}
       >
         <SafeAreaView style={estilo.container}>
@@ -192,6 +192,8 @@ const estilo = StyleSheet.create({
   btnCrear: {
     width: '100%', // Ahora ocupa el 80% del ancho del contenedor padre
     borderRadius: 30,
+    borderColor:'#000',
+     borderWidth:3,
 
     paddingVertical: 20,
     justifyContent: 'center', // Centra el texto verticalmente

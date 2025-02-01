@@ -239,8 +239,8 @@ const Nuevo = () => {
     return (
         <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
             <LinearGradient
-                colors={['#000000', '#025C48']} // Negro a verde oscuro
-                locations={[0.2, 1]} // El negro ocupa el 30% y el verde oscuro empieza desde ahí hasta el final
+              colors={['#000000', '#274d60']} // Negro a verde oscuro
+                locations={[0.1, 1]} // El negro ocupa el 30% y el verde oscuro empieza desde ahí hasta el final
                 style={styles.fondo}
             >
                 <SafeAreaView style={styles.container}>
@@ -254,6 +254,7 @@ const Nuevo = () => {
                     <TextInput
                         style={styles.input}
                         placeholder="N° SUMARIO"
+                        placeholderTextColor="gray"
                         keyboardType="default"
                         value={sumario}
                         onChangeText={(text) => setSumario(text)}
@@ -261,7 +262,8 @@ const Nuevo = () => {
 
                     <TextInput
                         style={[styles.textarea, styles.area]}
-                        placeholder="INGRESE SU PROCEDIMIENTO"
+                        placeholder="INGRESE PROCEDIMIENTO..."
+                        placeholderTextColor="gray"
                         keyboardType="default"
                         multiline={true}
                         numberOfLines={25}
@@ -273,7 +275,7 @@ const Nuevo = () => {
                     {/* //FECHAAAA */}
 
                     {(fechasFromRoute) ?
-                        <Text style={[styles.BotonText, { color: "#FFFF",marginBottom:50 }]}>CON FECHA: {fechaParaM}     </Text>
+                        <Text style={[styles.BotonText, { color: "#FFFF", marginBottom: 15 }]}>CON FECHA: {fechaParaM}     </Text>
                         :
                         <View >
                             <TouchableOpacity
@@ -296,45 +298,41 @@ const Nuevo = () => {
                                 }}
                             />
                         </View>
-                    }
 
+                    }
                     {/* //scrollHorizontal */}
                     {/* {(id)
                         ? <ImageScroll />
-
                         : <ImageScrollVacio />
-
-
                     } */}
 
 
-
-
-
-                    {(id) ? //si id trae algo mostrar actualizar
-                        <Pressable style={styles.boton} onPress={actualizarProce}>
-                            <Text style={styles.BotonText}>ACTUALIZAR</Text>
-                        </Pressable>
-                        : //de lom contrario guardar
-                        <Pressable style={styles.boton} onPress={guardarProce}>
-                            <Text style={styles.BotonText}>GUARDAR</Text>
-                        </Pressable>
-                    }
-                    {(id) ?
-                        <Pressable
-                            style={[styles.boton, styles.btnCancelar]}
-                            onPress={() => navi.dispatch(StackActions.pop(1))}
-                        >
-                            <Text style={styles.BotonText}>CANCELAR</Text>
-                        </Pressable>
-                        :
-                        <Pressable
-                            style={[styles.boton, styles.btnCancelar]}
-                            onPress={() => navi.navigate('NavegacionTop')}
-                        >
-                            <Text style={styles.BotonText}>CANCELAR</Text>
-                        </Pressable>
-                    }
+                    <View style={styles.cajaBotones}>
+                        {(id) ? //si id trae algo mostrar actualizar
+                            <Pressable style={[styles.boton,{marginTop:10,borderColor:'#1c1c1', borderWidth:2}]} onPress={actualizarProce}>
+                                <Text style={styles.BotonText}>ACTUALIZAR</Text>
+                            </Pressable>
+                            : //de lom contrario guardar
+                            <Pressable style={[styles.boton,{marginTop:10,borderColor:'#1c1c1', borderWidth:2}]} onPress={guardarProce}>
+                                <Text style={styles.BotonText}>GUARDAR</Text>
+                            </Pressable>
+                        }
+                        {(id) ?
+                            <Pressable
+                                style={[styles.boton, styles.btnCancelar,{borderColor:'#274d60', borderWidth:4}]}
+                                onPress={() => navi.dispatch(StackActions.pop(1))}
+                            >
+                                <Text style={[styles.BotonText,{color:'#274d60'}]}>X-CANCELAR</Text>
+                            </Pressable>
+                            :
+                            <Pressable
+                                style={[styles.boton, styles.btnCancelar, {borderColor:'#274d60', borderWidth:4}]}
+                                onPress={() => navi.navigate('NavegacionTop')}
+                            >
+                                <Text style={[styles.BotonText,{color:'#274d60'}]}>X-CANCELAR</Text>
+                            </Pressable>
+                        }
+                    </View>
 
 
 
@@ -357,24 +355,24 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         textTransform: 'uppercase',
         fontWeight: '900',
-        fontSize: 30,
-        marginTop: 16,
+        fontSize: 25,
+        marginTop: 5,
         color: '#ffff'
     },
     input: {
         backgroundColor: '#FFF',
         width: '60%',
-        marginTop: 18,
-        paddingVertical: 7,
+        marginTop: 10,
+        paddingVertical: 10,
         paddingHorizontal: 15,
         borderRadius: 15,
         textAlign: 'center',
         color: 'red',
         fontWeight: '600',
-        fontSize: 20
+        fontSize: 16
     },
     textarea: {
-        backgroundColor: '#FFFf',
+        backgroundColor: '#F5F5F5', //gris muy claro
         width: '80%',
         multiline: true, // Permite múltiples líneas
         numberOfLines: 40, // Define cuántas lín
@@ -386,15 +384,15 @@ const styles = StyleSheet.create({
         fontWeight: '500', // Peso de la fuente (normal, bold, e
     },
     area: {
-        marginTop: 20,
-        height: 500,
+        marginTop: 15,
+        height: 400,
     },
     pickerBOTON: {
         backgroundColor: 'transparent',
-        paddingVertical: 10,
+        paddingVertical: 2,
         borderRadius: 30,
-        marginTop: 20,
-        marginBottom: 40,
+        marginTop: 10,
+        marginBottom: 15,
         paddingHorizontal: 20,
         width: '70%',
         alignItems: 'center',
@@ -407,23 +405,42 @@ const styles = StyleSheet.create({
 
 
     boton: {
-        backgroundColor: 'cyan',
-        paddingVertical: 20,
+        backgroundColor: '#274d60',
+        paddingVertical: 10,
         borderRadius: 30,
-        marginTop: 5,
-        paddingHorizontal: 20,
-        width: '70%',
+        width: '90%',
         alignItems: 'center',
+        marginTop: 0,
+
     },
     BotonText: {
         fontWeight: '800',
         textAlign: 'center',
-        color: '#000',
+        color: '#fff',
         fontSize: 18
     },
     btnCancelar: {
-        marginTop: 18,
-        backgroundColor: 'red',
+        marginTop: 10,
+        backgroundColor: '#fff',
+    },
+
+    cajaBotones: {
+        backgroundColor: '#C6C6C6',
+        width: '100%',
+        alignItems: 'center',
+        justifyContent: 'center',
+        flex: 1,
+        borderTopLeftRadius: 40, // Esquinas superiores redondeadas
+        borderTopRightRadius: 40,
+        //sombras
+        // Sombra en iOS
+        shadowColor: '#000',
+        shadowOffset: { width: -4, height: -4 },
+        shadowOpacity: 0.3,
+        shadowRadius: 4,
+        // Sombra en Android
+        elevation: 5,
+        overflow: 'visible', // Para evitar recortes de sombra
     },
 });
 
