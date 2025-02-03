@@ -363,7 +363,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#FFF',
         width: '60%',
         marginTop: 10,
-        paddingVertical: 10,
+        paddingVertical: 8,
         paddingHorizontal: 15,
         borderRadius: 15,
         textAlign: 'center',
@@ -385,7 +385,7 @@ const styles = StyleSheet.create({
     },
     area: {
         marginTop: 15,
-        height: 400,
+        height: '57%',
     },
     pickerBOTON: {
         backgroundColor: 'transparent',
