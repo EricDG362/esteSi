@@ -1,10 +1,12 @@
 import React, { useState } from 'react'
-import {   Text, Modal, SafeAreaView, StyleSheet, TextInput, View, Pressable,
+import {
+    Text, Modal, SafeAreaView, StyleSheet, TextInput, View, Pressable,
     TouchableWithoutFeedback, Keyboard,
-    Platform,
-    Alert, } from 'react-native'
-    import { gql, useQuery, useMutation } from '@apollo/client';
-import { useNavigation } from '@react-navigation/native';
+    Platform, ScrollView, KeyboardAvoidingView,
+    Alert,
+} from 'react-native'
+import { gql, useQuery, useMutation } from '@apollo/client';
+
 
 
 const NUEVA_CUENTA = gql`
@@ -28,7 +30,7 @@ const OBTENER_USUARIOS = gql`
 
 
 
-const CrearUsua = ({modalVisible, setModalVisible}) => {
+const CrearUsua = ({ modalVisible, setModalVisible }) => {
 
     const [nombre, setNombre] = useState('')
     const [apellido, setApellido] = useState('')
@@ -38,29 +40,8 @@ const CrearUsua = ({modalVisible, setModalVisible}) => {
 
 
     //mutation
-   const [crearUsuario] = useMutation(NUEVA_CUENTA, {
-    update(cache, { data: { crearUsuario } }) {
-       
+    const [crearUsuario, { loading, error }] = useMutation(NUEVA_CUENTA,)
 
-        try {
-            const data = cache.readQuery({ query: OBTENER_USUARIOS });
-            
-            
-            if (data?.obtenerUsuarios) {
-                cache.writeQuery({
-                    query: OBTENER_USUARIOS,
-                    data: {
-                        obtenerUsuarios: [...data.obtenerUsuarios, crearUsuario],
-                    },
-                });
-             
-            }
-        } catch (error) {
-           
-        }
-    },
-});
-    
 
 
     //envia el formulario
@@ -111,17 +92,18 @@ const CrearUsua = ({modalVisible, setModalVisible}) => {
                             setEmail('');
                             setTelefono('');
                             setPassword('');
-    
+
                             // Cerrar el modal
                             setModalVisible(!modalVisible);
                         },
                     },
                 ]
             );
-    
+
 
 
         } catch (error) {
+            Alert.alert('Error!', error.message);
             console.log(error)
         }
     }
@@ -137,84 +119,92 @@ const CrearUsua = ({modalVisible, setModalVisible}) => {
             animationType='slide'
             visible={modalVisible}
         >
-            <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-               
+            <KeyboardAvoidingView
+                behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+                style={{ flex: 1 }}
+            >
+
+
+                <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+
                     <SafeAreaView style={estilo.container}>
 
+                        <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
 
-                        <View style={estilo.campo} >
-                            <Text style={estilo.label} >NOMBRE</Text>
-                            <TextInput
-                                style={estilo.input}
-                                value={nombre}
-                                onChangeText={text => setNombre(text)}
+                            <View style={[estilo.campo, {marginTop:70}]} >
+                                <Text style={estilo.label} >NOMBRE</Text>
+                                <TextInput
+                                    style={estilo.input}
+                                    value={nombre}
+                                    onChangeText={text => setNombre(text)}
 
-                            />
-                        </View>
+                                />
+                            </View>
 
-                        <View style={estilo.campo}>
-                            <Text style={estilo.label} >APELLIDO</Text>
-                            <TextInput
-                                style={estilo.input}
-                                value={apellido}
-                                onChangeText={text => setApellido(text)}
-                            />
-                        </View>
+                            <View style={estilo.campo}>
+                                <Text style={estilo.label} >APELLIDO</Text>
+                                <TextInput
+                                    style={estilo.input}
+                                    value={apellido}
+                                    onChangeText={text => setApellido(text)}
+                                />
+                            </View>
 
-                        <View style={estilo.campo}>
-                            <Text style={estilo.label} >TELEFONO</Text>
-                            <TextInput
-                                style={estilo.input}
-                                keyboardType='numeric'
-                                value={telefono}
-                                onChangeText={text => setTelefono(text)}
-                            />
-                        </View>
+                            <View style={estilo.campo}>
+                                <Text style={estilo.label} >TELEFONO</Text>
+                                <TextInput
+                                    style={estilo.input}
+                                    keyboardType='numeric'
+                                    value={telefono}
+                                    onChangeText={text => setTelefono(text)}
+                                />
+                            </View>
 
-                        <View style={estilo.campo}>
-                            <Text style={estilo.label} >EMAIL</Text>
-                            <TextInput
-                                style={estilo.input}
-                                keyboardType='email-address'
-                                onChangeText={text => setEmail(text)}
-                                value={email}
+                            <View style={estilo.campo}>
+                                <Text style={estilo.label} >EMAIL</Text>
+                                <TextInput
+                                    style={estilo.input}
+                                    keyboardType='email-address'
+                                    onChangeText={text => setEmail(text)}
+                                    value={email}
 
-                            />
-                        </View>
+                                />
+                            </View>
 
-                        <View style={estilo.campo}>
-                            <Text style={estilo.label} >PASSWORD</Text>
-                            <TextInput
-                                style={estilo.input}
-                                value={password}
-                                onChangeText={text => setPassword(text)}
-                            />
+                            <View style={estilo.campo}>
+                                <Text style={estilo.label} >PASSWORD</Text>
+                                <TextInput
+                                    style={estilo.input}
+                                    value={password}
+                                    onChangeText={text => setPassword(text)}
+                                />
 
-                            <Pressable //boton cancelar
-                                style={[estilo.boton, estilo.btnCrear]}
-                                onPress={() => handleSubmit()}
-                            >
-                                <Text style={[estilo.BotonText]}>CREAR</Text>
-                            </Pressable>
-
-
-                            <Pressable //boton cancelar
-                                style={[estilo.boton, , estilo.btnCancelar]}
-                                onPress={() => setModalVisible(false)}
-                            >
-                                <Text style={[estilo.BotonText]}>CANCELAR</Text>
-                            </Pressable>
+                                <Pressable //boton cancelar
+                                    style={[estilo.boton, estilo.btnCrear]}
+                                    onPress={() => handleSubmit()}
+                                >
+                                    <Text style={[estilo.BotonText]}>CREAR</Text>
+                                </Pressable>
 
 
-                        </View>
+                                <Pressable //boton cancelar
+                                    style={[estilo.boton, , estilo.btnCancelar]}
+                                    onPress={() => setModalVisible(false)}
+                                >
+                                    <Text style={[estilo.BotonText]}>CANCELAR</Text>
+                                </Pressable>
+
+
+                            </View>
 
 
 
 
-
+                        </ScrollView>
                     </SafeAreaView>
-                
-            </TouchableWithoutFeedback>
+
+                </TouchableWithoutFeedback>
+            </KeyboardAvoidingView>
         </Modal>
 
     )
@@ -260,11 +250,11 @@ const estilo = StyleSheet.create({
         textAlign: 'center',
 
     },
-    btnCrear:{
-   marginTop:30
+    btnCrear: {
+        marginTop: 50
     },
     btnCancelar: {
-        marginTop: Platform.OS === 'android' ? 50 : 60,
+        marginTop: Platform.OS === 'android' ? 30 : 60,
         backgroundColor: 'red'
     },
 })

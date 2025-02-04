@@ -132,7 +132,7 @@ const Administrador = () => {
 
                     <Text style={styles.subtitulo}>Lista de Usuarios</Text>
 
-                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
                         <TextInput
                             style={styles.input}
                             placeholder="Nombre de Usuario"
@@ -161,7 +161,7 @@ const Administrador = () => {
 
 
                     <FlatList
-                        data={usuariosFiltrados}
+                        data={usuariosFiltrados.slice().reverse()}
                         renderItem={({ item }) => (
 
                             //estas son las
@@ -172,6 +172,7 @@ const Administrador = () => {
                             />
                         )}
                         keyExtractor={(item) => item.id.toString()}
+                        showsVerticalScrollIndicator={false}
                         //si no hay nada
                         ListEmptyComponent={
                             <Text style={styles.titulo}>No hay Usuarios disponibles</Text>
@@ -212,12 +213,14 @@ const styles = StyleSheet.create({
         backgroundColor: '#FFF',
         width: '60%',
         marginTop: 20,
-        paddingVertical: 15,
+        marginBottom: 10,
+        paddingVertical: 8,
         paddingHorizontal: 15,
-        marginBottom: 20,
+        borderRadius: 15,
         textAlign: 'center',
-        marginRight: 10,
-        fontSize: 15
+        fontSize: 16,
+        color: 'red',
+        fontWeight: '600',
     },
     boton: {
         backgroundColor: 'cyan',

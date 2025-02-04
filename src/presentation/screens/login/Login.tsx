@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import {
   Text, TextInput, TouchableWithoutFeedback, KeyboardAvoidingView,
   ImageBackground, StyleSheet, Platform, Keyboard, Pressable, View,
-  Alert,
+  Alert,ScrollView
 } from 'react-native';
 import { StackActions, useNavigation } from '@react-navigation/native';
 import FormularioModal from './FormularioModal';
@@ -77,7 +77,7 @@ const [autenticarUsuario] =useMutation(AUTENTICAR_USUARIO)
       await AsyncStorage.setItem('token', token)
      
       //ingreso a administrador
-      if (email==='admin@admin.com'){
+      if (email.trim() == 'admin@admin.com'){
         navi.dispatch(StackActions.replace('Administrador'))
         return //corta aca
       }
@@ -112,6 +112,9 @@ const [autenticarUsuario] =useMutation(AUTENTICAR_USUARIO)
         style={estilo.container}
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       >
+           <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+
+         
         <ImageBackground
           source={require('../../../../assets/img/cd.jpg')}
           style={estilo.background}
@@ -164,6 +167,7 @@ const [autenticarUsuario] =useMutation(AUTENTICAR_USUARIO)
             setModalVisible={setModalVisible}
           />
         </ImageBackground>
+        </ScrollView>
       </KeyboardAvoidingView>
     </TouchableWithoutFeedback>
   );

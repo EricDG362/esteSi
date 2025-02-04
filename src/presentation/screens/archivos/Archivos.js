@@ -218,13 +218,15 @@ const styles = StyleSheet.create({
     input: {
         backgroundColor: '#FFF',
         width: '60%',
-        marginTop: 30,
+        marginTop: 20,
         marginBottom: 10,
-        paddingVertical: 15,
+        paddingVertical: 8,
         paddingHorizontal: 15,
         borderRadius: 15,
         textAlign: 'center',
         fontSize: 16,
+        color: 'red',
+        fontWeight: '600',
 
     },
     boton: {

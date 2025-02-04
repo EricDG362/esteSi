@@ -71,11 +71,13 @@ const e = StyleSheet.create({
         justifyContent: 'space-between',
         backgroundColor: '#fff',
         marginVertical: 5,
-        borderRadius: 5,
-        padding: 20,
+        borderRadius: 18,
+        paddingHorizontal: 20,
+        paddingVertical:5,
         borderBottomColor: '#FF0000',
         borderWidth: 3,
         width: '100%',
+        
         //sombra para la caja
         shadowColor: '#000',
         shadowOffset: {
@@ -93,7 +95,7 @@ const e = StyleSheet.create({
         color: '#374151',
         textTransform: 'uppercase',
         fontWeight: 700,
-        marginBottom: 5
+        marginBottom: 2
 
 
     },
