@@ -11,7 +11,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import { FlatList } from 'react-native-gesture-handler';
 import { gql, useQuery, useMutation } from '@apollo/client';
 import Usuario from './Usuario';
-import { useNavigation } from '@react-navigation/native';
+import { StackActions, useNavigation } from '@react-navigation/native';
 import CrearUsua from './CrearUsua';
 
 
@@ -54,7 +54,7 @@ mutation  actualizarEstado($id:ID!, $input:UsuarioInput, $estado: Boolean){
 
 const Administrador = () => {
 
-    const [modalVisible, setModalVisible] = useState (false)
+    const [modalVisible, setModalVisible] = useState(false)
     const [filtro, setFiltro] = useState('');
 
     const navi = useNavigation()
@@ -147,9 +147,9 @@ const Administrador = () => {
                             <Text style={styles.BotonText}>+</Text>
                         </Pressable>
 
-                        <CrearUsua 
-                        modalVisible={modalVisible}
-                        setModalVisible={setModalVisible}
+                        <CrearUsua
+                            modalVisible={modalVisible}
+                            setModalVisible={setModalVisible}
                         />
 
                     </View>
@@ -179,6 +179,14 @@ const Administrador = () => {
                         }
                         style={{ width: '80%' }} // Ajusta el ancho aquí
                     />
+
+                    <Pressable
+                        onPress={() => navi.dispatch(StackActions.replace('Login'))}
+                        style={[styles.btnCrear, styles.footer]}
+                    >
+                        <Text style={[styles.textbtn]}>SALIR</Text>
+
+                    </Pressable>
 
 
 
@@ -236,6 +244,31 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         fontSize: 30,
 
+    },
+    btnCrear: {
+        width: '80%', // Ahora ocupa el 80% del ancho del contenedor padre
+        borderRadius: 30,
+        marginBottom: 20,
+        paddingVertical: 10,
+        justifyContent: 'center', // Centra el texto verticalmente
+        alignItems: 'center', // Centra el texto horizontalmente
+
+    },
+    textbtn: {
+        textAlign: 'center',
+        fontSize: 28,
+        fontWeight: '900',
+
+    },
+    footer: {
+        position: 'absolute',
+        bottom: 0,
+        width: '90%',
+        backgroundColor: '#274d60',
+        padding: 10,
+        alignItems: 'center',
+        opacity: 0.7,
+        padding: 20
     },
 });
 

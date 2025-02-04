@@ -77,7 +77,7 @@ const [autenticarUsuario] =useMutation(AUTENTICAR_USUARIO)
       await AsyncStorage.setItem('token', token)
      
       //ingreso a administrador
-      if (email.trim() == 'admin@admin.com'){
+      if (email.trim().toLowerCase() === 'admin@admin.com'){
         navi.dispatch(StackActions.replace('Administrador'))
         return //corta aca
       }
