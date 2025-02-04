@@ -189,7 +189,6 @@ const Administrador = () => {
                     </Pressable>
 
 
-
                 </SafeAreaView>
             </LinearGradient>
         </TouchableWithoutFeedback>

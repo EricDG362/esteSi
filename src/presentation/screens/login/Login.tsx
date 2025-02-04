@@ -11,6 +11,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 //apollo
 import { ApolloError, gql, useMutation } from '@apollo/client';
+import VerificarConexion from '../sinconexion/VerificarConexion';
 
 const AUTENTICAR_USUARIO = gql`
 mutation autenticarUsuario($input: AutenticarInput) {
@@ -107,6 +108,7 @@ const [autenticarUsuario] =useMutation(AUTENTICAR_USUARIO)
 
 
   return (
+    <VerificarConexion>
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
       <KeyboardAvoidingView
         style={estilo.container}
@@ -170,6 +172,7 @@ const [autenticarUsuario] =useMutation(AUTENTICAR_USUARIO)
         </ScrollView>
       </KeyboardAvoidingView>
     </TouchableWithoutFeedback>
+    </VerificarConexion>
   );
 };
 

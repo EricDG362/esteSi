@@ -19,9 +19,9 @@ import { gql, useMutation } from '@apollo/client';
 import LinearGradient from 'react-native-linear-gradient';
 import DatePicker from 'react-native-date-picker';
 import { format } from 'date-fns'; //  librería para formatear la fecha
-import { ScrollView } from 'react-native-gesture-handler';
-import ImageScroll from './ImageScroll';
-import ImageScrollVacio from './ImageScrollVacio';
+import VerificarConexion from '../sinconexion/VerificarConexion';
+
+
 
 
 
@@ -237,6 +237,7 @@ const Nuevo = () => {
 
 
     return (
+        <VerificarConexion>
         <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
             <LinearGradient
               colors={['#000000', '#274d60']} // Negro a verde oscuro
@@ -340,6 +341,7 @@ const Nuevo = () => {
                 </SafeAreaView>
             </LinearGradient>
         </TouchableWithoutFeedback>
+        </VerificarConexion>
     );
 };
 

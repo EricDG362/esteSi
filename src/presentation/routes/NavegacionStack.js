@@ -7,6 +7,7 @@ import Nuevo from '../screens/archivos/Nuevo';
 import Login from '../screens/login/Login';
 import Administrador from '../screens/admin/Administrador';
 import CrearUsua from '../screens/admin/CrearUsua';
+import VerificarConexion from '../screens/sinconexion/VerificarConexion';
 
 
 
@@ -76,7 +77,17 @@ const NavegacionStack = () => {
         component={Nuevo}
         options={{ title: 'Nuevo' }}
       />
+
+      <Stack.Screen
+        name="ErrorConexión"
+        component={VerificarConexion}
+        options={{ title: 'ErrorConexión' }}
+      />
+
+
     </Stack.Navigator>
+
+
 
   );
 };

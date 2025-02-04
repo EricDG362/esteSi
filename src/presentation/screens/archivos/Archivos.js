@@ -18,6 +18,7 @@ import { gql, useQuery, useMutation } from '@apollo/client';
 import Archivo from './Archivo';
 import { useNavigation } from '@react-navigation/native';
 import LinearGradient from 'react-native-linear-gradient';
+import VerificarConexion from '../sinconexion/VerificarConexion';
 
 
 
@@ -130,6 +131,8 @@ const Archivos = () => {
 
 
     return (
+
+        <VerificarConexion>
         <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
             <LinearGradient
                 colors={['#000000', '#274d60']} // Negro a gris oscuro
@@ -196,6 +199,8 @@ const Archivos = () => {
                 </SafeAreaView>
             </LinearGradient>
         </TouchableWithoutFeedback>
+
+        </VerificarConexion>
     );
 };
 

@@ -11,6 +11,7 @@ import {
 
 import { useNavigation } from '@react-navigation/native';
 import emailjs from '@emailjs/react-native'
+import VerificarConexion from '../sinconexion/VerificarConexion';
 
 
 
@@ -102,7 +103,7 @@ const FormularioModal = ({ modalVisible, setModalVisible }: FormularioModalProps
 
 
   return (
-
+    <VerificarConexion>
 
     <Modal
       animationType='slide'
@@ -216,6 +217,8 @@ const FormularioModal = ({ modalVisible, setModalVisible }: FormularioModalProps
         </KeyboardAvoidingView>
       </TouchableWithoutFeedback>
     </Modal>
+
+    </VerificarConexion>
 
 
   )
