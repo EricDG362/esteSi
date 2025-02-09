@@ -94,7 +94,7 @@ const Home = () => {
 
     ]).start(() => {
       // Navegar después de completar la animación
-      navigation.navigate('Nuevo');
+      navigation.replace('Nuevo');
     });
   }
 

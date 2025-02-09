@@ -27,6 +27,8 @@ const VerificarConexion = ({ children }) => {
         return () => unsubscribe();
     }, []);
 
+    
+
     // Si no hay conexión, mostrar el componente SinConexion
     if (!isConnected) {
         return <SinConexion />;

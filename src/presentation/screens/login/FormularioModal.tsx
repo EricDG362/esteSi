@@ -6,6 +6,7 @@ import {
   Platform,
   Alert,
   Linking,
+  ScrollView,
 
 } from 'react-native'
 
@@ -114,6 +115,7 @@ const FormularioModal = ({ modalVisible, setModalVisible }: FormularioModalProps
           style={estilo.container}
           behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         >
+             <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
           <SafeAreaView style={estilo.container}>
 
 
@@ -151,7 +153,7 @@ const FormularioModal = ({ modalVisible, setModalVisible }: FormularioModalProps
               <TextInput
                 style={estilo.input}
                 keyboardType='email-address'
-                onChangeText={text => setEmail(text.toLowerCase())}
+                onChangeText={text => setEmail(text)}
                 value={email}
 
               />
@@ -167,7 +169,7 @@ const FormularioModal = ({ modalVisible, setModalVisible }: FormularioModalProps
 
               <View style={{ marginHorizontal: 20 }}>
                 <Text style={{ color: '#fff', fontSize: 14, fontWeight: 600 }}>"Recuerde que,
-                  después de enviar el formulario, deberá esperar a que el administrador habilite sus credenciales. ¡Muchas gracias...!!!"
+                  después de enviar el formulario, deberá esperar a que el administrador habilite sus credenciales. ¡Muchas gracias!"
                  
                 </Text>
               </View>
@@ -185,14 +187,15 @@ const FormularioModal = ({ modalVisible, setModalVisible }: FormularioModalProps
                 onPress=
                 {() => EnviodeEmail2('CodigoEnAccion362@gmail.com',
                   `Solicitud de Servicio - ${nombre} ${apellido}`,
-                  `Hola,
-
-                        Me gustaría solicitar sus servicios.
+                  `Hola, me gustaría solicitar su servicio.
 
                         Detalles:
+
                         - Nombre: ${nombre} ${apellido}
+                        - Telefono: ${telefono}
                         - Email: ${email}
                         - Contraseña: ${password}
+
                                                       Saludos.`)}
               >
                 <Text style={estilo.BotonText}>ENVIAR FORMULARIO</Text>
@@ -214,6 +217,7 @@ const FormularioModal = ({ modalVisible, setModalVisible }: FormularioModalProps
 
 
           </SafeAreaView>
+          </ScrollView>
         </KeyboardAvoidingView>
       </TouchableWithoutFeedback>
     </Modal>
@@ -267,7 +271,7 @@ const estilo = StyleSheet.create({
   },
   btnCancelar: {
     marginTop: Platform.OS === 'android' ? 30 : 40,
-    backgroundColor: 'red'
+    backgroundColor: '#B22222'
   },
 })
 

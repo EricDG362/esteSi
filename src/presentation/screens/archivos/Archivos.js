@@ -11,7 +11,6 @@ import {
     View,
     Pressable,
     ActivityIndicator,
-    Image
 
 } from 'react-native';
 import { gql, useQuery, useMutation } from '@apollo/client';
@@ -90,8 +89,8 @@ const Archivos = () => {
 
     if (error) {
         console.log('Error al cargar datos:', error);
-        return 
-       
+        return
+
     }
 
     const mensajeEliminarProce = (id) => {
@@ -118,7 +117,7 @@ const Archivos = () => {
     const abrirNuevo = (id, procedi, sumarios, fechas) => {
 
 
-        navi.navigate("Nuevo", { id, procedi, sumarios, fechas });
+        navi.replace("Nuevo", { id, procedi, sumarios, fechas });
     }
 
 
@@ -133,72 +132,72 @@ const Archivos = () => {
     return (
 
         <VerificarConexion>
-        <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-            <LinearGradient
-                colors={['#000000', '#274d60']} // Negro a gris oscuro
-                locations={[0.1, 1]} // El negro ocupa el 10% y el gris oscuro empieza desde ahí hasta el final // El negro ocupa el 30% y el verde oscuro empieza desde ahí hasta el final
-                style={styles.fondo}
-            >
-                <SafeAreaView style={styles.container}>
-                    <Text style={styles.titulo}>Procedimientos</Text>
+            <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+                <LinearGradient
+                    colors={['#000000', '#274d60']} // Negro a gris oscuro
+                    locations={[0.1, 1]} // El negro ocupa el 10% y el gris oscuro empieza desde ahí hasta el final // El negro ocupa el 30% y el verde oscuro empieza desde ahí hasta el final
+                    style={styles.fondo}
+                >
+                    <SafeAreaView style={styles.container}>
+                        <Text style={styles.titulo}>Procedimientos <Text style={{color:'#90EE90'}}>({procedimientosFiltrados.length})</Text></Text>
 
-                    {/* Input de filtro */}
-                    <TextInput
-                        style={styles.input}
-                        placeholder="N° de SUMARIO"
-                        placeholderTextColor={'gray'}
-                        keyboardType="default"
-                        value={filtro}
-                        onChangeText={(text) => setFiltro(text)}
-                    />
-
-                    {(loading) ?
-                        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor:'#000' }}>
-                            <ActivityIndicator size={80} color="red" />
-                        </View>
-                        :
-                        <FlatList
-                            style={{ width: '80%', flex: 1 }}
-                            data={procedimientosFiltrados.slice().reverse()} //slice crea una copia//reverse invierte el orden parta q aparesca elprimero
-                            renderItem={({ item }) => (
-
-                                //estas son las
-                                <Archivo
-                                    item={item}
-                                    onLongPress={mensajeEliminarProce}
-                                    onPress={abrirNuevo}
-
-
-                                />
-
-                            )}
-                            keyExtractor={(item) => item.id.toString()}
-                            showsVerticalScrollIndicator={false}
-                            ListEmptyComponent={
-                                <Text style={styles.titulo}>No hay procedimientos disponibles</Text>
-                            }
+                        {/* Input de filtro */}
+                        <TextInput
+                            style={styles.input}
+                            placeholder="N° de SUMARIO"
+                            placeholderTextColor={'gray'}
+                            keyboardType="default"
+                            value={filtro}
+                            onChangeText={(text) => setFiltro(text)}
                         />
 
-                    }
+                        {(loading) ?
+                            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#000' }}>
+                                <ActivityIndicator size={80} color="red" />
+                            </View>
+                            :
+                            <FlatList
+                                style={{ width: '80%', flex: 1 }}
+                                data={procedimientosFiltrados.slice().reverse()} //slice crea una copia//reverse invierte el orden parta q aparesca elprimero
+                                renderItem={({ item }) => (
+
+                                    //estas son las
+                                    <Archivo
+                                        item={item}
+                                        onLongPress={mensajeEliminarProce}
+                                        onPress={abrirNuevo}
+
+
+                                    />
+
+                                )}
+                                keyExtractor={(item) => item.id.toString()}
+                                showsVerticalScrollIndicator={false}
+                                ListEmptyComponent={
+                                    <Text style={styles.titulo}>No hay procedimientos disponibles</Text>
+                                }
+                            />
+
+                        }
 
 
 
-                    <Pressable
-                        onPress={() => navi.navigate('Nuevo')}
-                        style={[styles.btnCrear, styles.footer]}
-                    >
-                        <Text style={[styles.textbtn]}>CREAR 
-                            NUEVO
-                        </Text>
+                        <Pressable
+                            onPress={() => navi.navigate('Nuevo')}
+                            style={[styles.btnCrear, styles.footer]}
+                        >
+                            <Text style={[styles.textbtn]}>CREAR
+                                NUEVO
+                            </Text>
 
-                    </Pressable>
-
-
+                        </Pressable>
 
 
-                </SafeAreaView>
-            </LinearGradient>
-        </TouchableWithoutFeedback>
+
+
+                    </SafeAreaView>
+                </LinearGradient>
+            </TouchableWithoutFeedback>
 
         </VerificarConexion>
     );

@@ -10,9 +10,8 @@ import {
     Pressable,
     Alert,
     View,
-    Button,
     TouchableOpacity,
-    Image
+    ActivityIndicator
 } from 'react-native';
 
 import { gql, useMutation } from '@apollo/client';
@@ -68,6 +67,8 @@ const Nuevo = () => {
     // Desestructurando los parámetros pasados, con valores por defecto
     const { id: idFromRoute, procedi: proceFromRoute, sumarios: sumarioFromRoute, fechas: fechasFromRoute } = params || {};
 
+    //para el activityIndicator
+    const [cargando, setCargando] = useState(false);
 
     //date Piker
     const [date, setDate] = useState(new Date() || fechasFromRoute)
@@ -152,6 +153,8 @@ const Nuevo = () => {
             return;
         }
 
+        setCargando(true); // Activa el indicador
+
         try {
             const { data } = await nuevoProcedimiento({
                 variables: {
@@ -167,7 +170,7 @@ const Nuevo = () => {
                 [
                     {
                         text: 'Aceptar',
-                        onPress: () => navi.navigate('Archivos')
+                        onPress: () => navi.replace('Archivos')
                     }
                 ]);
 
@@ -182,6 +185,10 @@ const Nuevo = () => {
 
             Alert.alert('Error', errorMessage);
         }
+
+        finally {
+            setCargando(false); // Desactiva el indicador
+        }
     };
 
     const actualizarProce = async () => {
@@ -194,6 +201,10 @@ const Nuevo = () => {
             );
             return;
         }
+
+
+
+        setCargando(true); // Activa el indicador
 
         try {
 
@@ -214,7 +225,7 @@ const Nuevo = () => {
                 [
                     {
                         text: 'Aceptar',
-                        onPress: () => navi.navigate('Archivos')
+                        onPress: () => navi.replace('Archivos')
                     }
                 ]);
 
@@ -229,6 +240,13 @@ const Nuevo = () => {
 
             Alert.alert('Error', errorMessage);
         }
+
+
+
+        finally {
+            setCargando(false); // Desactiva el indicador
+        }
+
     };
 
 
@@ -238,109 +256,116 @@ const Nuevo = () => {
 
     return (
         <VerificarConexion>
-        <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-            <LinearGradient
-              colors={['#000000', '#274d60']} // Negro a verde oscuro
-                locations={[0.1, 1]} // El negro ocupa el 30% y el verde oscuro empieza desde ahí hasta el final
-                style={styles.fondo}
-            >
-                <SafeAreaView style={styles.container}>
-                    {(id)
-                        ? <Text style={styles.titulo}>Procedimiento</Text>
+            <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+                <LinearGradient
+                    colors={['#000000', '#274d60']} // Negro a verde oscuro
+                    locations={[0.1, 1]} // El negro ocupa el 30% y el verde oscuro empieza desde ahí hasta el final
+                    style={styles.fondo}
+                >
+                    <SafeAreaView style={styles.container}>
+                        {(id)
+                            ? <Text style={styles.titulo}>Procedimiento</Text>
 
-                        : <Text style={styles.titulo}>Nuevo Procedimiento</Text>
+                            : <Text style={styles.titulo}>Nuevo Procedimiento</Text>
 
-                    }
+                        }
 
-                    <TextInput
-                        style={styles.input}
-                        placeholder="N° SUMARIO"
-                        placeholderTextColor="gray"
-                        keyboardType="default"
-                        value={sumario}
-                        onChangeText={(text) => setSumario(text)}
-                    />
+                        <TextInput
+                            style={styles.input}
+                            placeholder="N° SUMARIO"
+                            placeholderTextColor="gray"
+                            keyboardType="default"
+                            value={sumario}
+                            onChangeText={(text) => setSumario(text)}
+                        />
 
-                    <TextInput
-                        style={[styles.textarea, styles.area]}
-                        placeholder="INGRESE PROCEDIMIENTO..."
-                        placeholderTextColor="gray"
-                        keyboardType="default"
-                        multiline={true}
-                        numberOfLines={25}
-                        textAlignVertical="top"
-                        value={proce}
-                        onChangeText={(text) => setProce(text)}
-                    />
+                        <TextInput
+                            style={[styles.textarea, styles.area]}
+                            placeholder="INGRESE PROCEDIMIENTO..."
+                            placeholderTextColor="gray"
+                            keyboardType="default"
+                            multiline={true}
+                            numberOfLines={25}
+                            textAlignVertical="top"
+                            value={proce}
+                            onChangeText={(text) => setProce(text)}
+                        />
 
-                    {/* //FECHAAAA */}
+                        {/* //FECHAAAA */}
 
-                    {(fechasFromRoute) ?
-                        <Text style={[styles.BotonText, { color: "#FFFF", marginBottom: 15 }]}>CON FECHA: {fechaParaM}     </Text>
-                        :
-                        <View >
-                            <TouchableOpacity
-                                style={styles.pickerBOTON}
-                                onPress={() => setOpen(true)}
-                            >
-                                <Text style={[styles.BotonText, { color: "#FFFF" }]}>SELECCIONE FECHA</Text>
-                            </TouchableOpacity>
-                            <DatePicker
-                                modal
-                                open={open}
-                                date={date}
-                                locale='es'
-                                onConfirm={(date) => {
-                                    setOpen(false)
-                                    setDate(date)
-                                }}
-                                onCancel={() => {
-                                    setOpen(false)
-                                }}
-                            />
-                        </View>
+                        {(fechasFromRoute) ?
+                            <Text style={[styles.BotonText, { color: "#FFFF", marginBottom: 15 }]}>CON FECHA: {fechaParaM}     </Text>
+                            :
+                            <View >
+                                <TouchableOpacity
+                                    style={styles.pickerBOTON}
+                                    onPress={() => setOpen(true)}
+                                >
+                                    <Text style={[styles.BotonText, { color: "#FFFF" }]}>SELECCIONE FECHA</Text>
+                                </TouchableOpacity>
+                                <DatePicker
+                                    modal
+                                    open={open}
+                                    date={date}
+                                    locale='es'
+                                    onConfirm={(date) => {
+                                        setOpen(false)
+                                        setDate(date)
+                                    }}
+                                    onCancel={() => {
+                                        setOpen(false)
+                                    }}
+                                />
+                            </View>
 
-                    }
-                    {/* //scrollHorizontal */}
-                    {/* {(id)
+                        }
+                        {/* //scrollHorizontal */}
+                        {/* {(id)
                         ? <ImageScroll />
                         : <ImageScrollVacio />
                     } */}
 
 
-                    <View style={styles.cajaBotones}>
-                        {(id) ? //si id trae algo mostrar actualizar
-                            <Pressable style={[styles.boton,{marginTop:10,borderColor:'#1c1c1', borderWidth:2}]} onPress={actualizarProce}>
-                                <Text style={styles.BotonText}>ACTUALIZAR</Text>
-                            </Pressable>
-                            : //de lom contrario guardar
-                            <Pressable style={[styles.boton,{marginTop:10,borderColor:'#1c1c1', borderWidth:2}]} onPress={guardarProce}>
-                                <Text style={styles.BotonText}>GUARDAR</Text>
-                            </Pressable>
-                        }
-                        {(id) ?
-                            <Pressable
-                                style={[styles.boton, styles.btnCancelar,{borderColor:'#274d60', borderWidth:4}]}
-                                onPress={() => navi.dispatch(StackActions.pop(1))}
-                            >
-                                <Text style={[styles.BotonText,{color:'#274d60'}]}>X-CANCELAR</Text>
-                            </Pressable>
-                            :
-                            <Pressable
-                                style={[styles.boton, styles.btnCancelar, {borderColor:'#274d60', borderWidth:4}]}
-                                onPress={() => navi.navigate('NavegacionTop')}
-                            >
-                                <Text style={[styles.BotonText,{color:'#274d60'}]}>X-CANCELAR</Text>
-                            </Pressable>
-                        }
-                    </View>
+                        <View style={styles.cajaBotones}>
+
+                            {cargando ? (
+                                <ActivityIndicator size="large" color="red" />
+                            ) : (
+                                (id) ? //si id trae algo mostrar actualizar
+                                    <Pressable style={[styles.boton, { marginTop: 10, borderColor: '#1c1c1', borderWidth: 2 }]} onPress={actualizarProce}>
+                                        <Text style={styles.BotonText}>ACTUALIZAR</Text>
+                                    </Pressable>
+                                    : //de lom contrario guardar
+                                    <Pressable style={[styles.boton, { marginTop: 10, borderColor: '#1c1c1', borderWidth: 2 }]} onPress={guardarProce}>
+                                        <Text style={styles.BotonText}>GUARDAR</Text>
+                                    </Pressable>
+                            )}
+                        
+
+
+                            {(id) ?
+                                <Pressable
+                                    style={[styles.boton, styles.btnCancelar, { borderColor: '#274d60', borderWidth: 4 }]}
+                                    onPress={() => navi.replace('NavegacionTop')}
+                                >
+                                    <Text style={[styles.BotonText, { color: '#274d60' }]}>X-CANCELAR</Text>
+                                </Pressable>
+                                :
+                                <Pressable
+                                    style={[styles.boton, styles.btnCancelar, { borderColor: '#274d60', borderWidth: 4 }]}
+                                    onPress={() => navi.replace('NavegacionTop')}
+                                >
+                                    <Text style={[styles.BotonText, { color: '#274d60' }]}>X-CANCELAR</Text>
+                                </Pressable>
+                            }
+                        </View>
 
 
 
 
-                </SafeAreaView>
-            </LinearGradient>
-        </TouchableWithoutFeedback>
+                    </SafeAreaView>
+                </LinearGradient>
+            </TouchableWithoutFeedback>
         </VerificarConexion>
     );
 };

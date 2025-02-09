@@ -255,7 +255,7 @@ const estilo = StyleSheet.create({
     },
     btnCancelar: {
         marginTop: Platform.OS === 'android' ? 30 : 60,
-        backgroundColor: 'red'
+        backgroundColor: '#B22222'
     },
 })
 

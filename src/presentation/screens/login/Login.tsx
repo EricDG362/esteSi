@@ -2,7 +2,10 @@ import React, { useState } from 'react';
 import {
   Text, TextInput, TouchableWithoutFeedback, KeyboardAvoidingView,
   ImageBackground, StyleSheet, Platform, Keyboard, Pressable, View,
-  Alert,ScrollView
+  Alert,ScrollView,
+  Image,
+  SafeAreaView,
+  ActivityIndicator
 } from 'react-native';
 import { StackActions, useNavigation } from '@react-navigation/native';
 import FormularioModal from './FormularioModal';
@@ -12,6 +15,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 //apollo
 import { ApolloError, gql, useMutation } from '@apollo/client';
 import VerificarConexion from '../sinconexion/VerificarConexion';
+import { Colors } from 'react-native/Libraries/NewAppScreen';
 
 const AUTENTICAR_USUARIO = gql`
 mutation autenticarUsuario($input: AutenticarInput) {
@@ -24,12 +28,14 @@ mutation autenticarUsuario($input: AutenticarInput) {
 `;
 
 const Login = () => {
+
   const [modalVisible, setModalVisible] = useState<boolean>(false);
   const [secureTextEntry, setSecureTextEntry] = useState(true); // Estado para manejar la visibilidad de la contraseña
 
   const [email, setEmail] = useState('')
   const [password, setPass] = useState('')
 
+  const [loading, setLoading] = useState(false);
 
   const navi = useNavigation();
 
@@ -49,6 +55,9 @@ const [autenticarUsuario] =useMutation(AUTENTICAR_USUARIO)
       );
       return; //corte la ejecucion
     }
+
+    setLoading(true); // Muestra el ActivityIndicator
+
 
     //autenticar
     try {
@@ -101,6 +110,12 @@ const [autenticarUsuario] =useMutation(AUTENTICAR_USUARIO)
     }
 
 
+
+    finally {
+      setLoading(false); // Oculta el ActivityIndicator después de la ejecución
+    }
+
+
   }
 
 
@@ -109,19 +124,28 @@ const [autenticarUsuario] =useMutation(AUTENTICAR_USUARIO)
 
   return (
     <VerificarConexion>
+      <SafeAreaView style={{ flex: 1 , backgroundColor:'#000'}}>
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+ 
       <KeyboardAvoidingView
         style={estilo.container}
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       >
+        
            <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
 
-         
+          
         <ImageBackground
           source={require('../../../../assets/img/cd.jpg')}
           style={estilo.background}
           resizeMode="cover"
         >
+
+          <Image
+           source={require('../../../../assets/img/logo.png')}
+           style={estilo.logo}
+           resizeMode='cover'
+          />
           
           <TextInput
             style={[estilo.input, estilo.inputPrime]}
@@ -143,13 +167,19 @@ const [autenticarUsuario] =useMutation(AUTENTICAR_USUARIO)
     
 
           <Pressable
-            style={estilo.boton}
+            style={[estilo.boton, loading &&{opacity:0.7}]}
             onPress={() =>{
               //navi.navigate('NavegacionTop' as never);  
               iniciarSesion()
             }}
+            disabled ={loading} // El botón se desactiva mientras carga  para evitar múltiples clics.
           >
+            {loading ? (
+              <ActivityIndicator size={'large'} color={'red'} /> )
+            :
             <Text style={estilo.botontext}>INGRESAR</Text>
+            }
+           
           </Pressable>
 
 
@@ -168,10 +198,18 @@ const [autenticarUsuario] =useMutation(AUTENTICAR_USUARIO)
             modalVisible={modalVisible}
             setModalVisible={setModalVisible}
           />
+
+
+          
         </ImageBackground>
+      
         </ScrollView>
+      
       </KeyboardAvoidingView>
+ 
+    
     </TouchableWithoutFeedback>
+    </SafeAreaView>
     </VerificarConexion>
   );
 };
@@ -186,6 +224,10 @@ const estilo = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     width:'100%',
+  },
+  logo:{
+    width:'100%',height:'11%', justifyContent:'center',alignContent:'center', alignItems:'center',
+    position:'absolute', top:0,
   },
   input: {
     backgroundColor: 'rgba(255, 255, 255, 0.5)',

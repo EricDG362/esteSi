@@ -24,8 +24,8 @@
                                 <color key="textColor" systemColor="groupTableViewBackgroundColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" fixedFrame="YES" image="iconoApp.jpg" translatesAutoresizingMaskIntoConstraints="NO" id="awa-mg-WKh">
-                                <rect key="frame" x="65" y="201" width="244" height="265"/>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" fixedFrame="YES" image="2.png" translatesAutoresizingMaskIntoConstraints="NO" id="QRr-jv-UQp">
+                                <rect key="frame" x="0.0" y="200" width="375" height="375"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </imageView>
                         </subviews>
@@ -39,7 +39,7 @@
         </scene>
     </scenes>
     <resources>
-        <image name="iconoApp.jpg" width="474" height="474"/>
+        <image name="2.png" width="375" height="375"/>
         <systemColor name="groupTableViewBackgroundColor">
             <color red="0.94901960784313721" green="0.94901960784313721" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
